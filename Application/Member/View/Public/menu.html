@@ -4,14 +4,14 @@
         	<a href="#">
             	<i class="fa fa-user"></i> <span>个人中心</span>
             </a>
-        	<ul class="treeview-menu">
+        	<ul class="treeview-menu" style="display:block;">
             	<li <?php if($parent == 1 AND $sub == 1) echo 'class="active"';?>><a href="{:U('Home/Diary/index?view=self')}"><i class="fa fa-angle-double-right"></i>我的日志</a></li>
                 <li <?php if($parent == 1 AND $sub == 2) echo 'class="active"';?>><a href="{:U('Home/Diary/add')}"><i class="fa fa-angle-double-right"></i>添加日志</a></li>
                 <li <?php if($parent == 1 AND $sub == 3) echo 'class="active"';?>><a href="{:U('Home/Diary/add?type=2')}"><i class="fa fa-angle-double-right"></i>添加周报</a></li>
                 <li <?php if($parent == 1 AND $sub == 4) echo 'class="active"';?>><a href="{:U('Member/Users/password')}"><i class="fa fa-angle-double-right"></i>修改密码</a></li>
                 <li <?php if($parent == 1 AND $sub == 5) echo 'class="active"';?>><a href="{:U('Member/Team/index?userid='.session('uid'))}"><i class="fa fa-angle-double-right"></i>我的团队</a></li>
-                <li <?php if($parent == 1 AND $sub == 6) echo 'class="active"';?>><a href="{:U('Home/Project/index?userid='.session('uid'))}"><i class="fa fa-angle-double-right"></i>我的任务</a></li>
-                <li <?php if($parent == 1 AND $sub == 7) echo 'class="active"';?>><a href="{:U('Home/Message/index?userid='.session('uid'))}"><i class="fa fa-angle-double-right"></i>我的提醒</a></li>
+                <!--<li <?php if($parent == 1 AND $sub == 6) echo 'class="active"';?>><a href="{:U('Home/Project/index?userid='.session('uid'))}"><i class="fa fa-angle-double-right"></i>我的任务</a></li>
+                <li <?php if($parent == 1 AND $sub == 7) echo 'class="active"';?>><a href="{:U('Home/Message/index?userid='.session('uid'))}"><i class="fa fa-angle-double-right"></i>我的提醒</a></li>-->
             </ul>	
         </li>
         <if condition="(session('access')['view_development_diary'] eq 2) OR (session('access')['view_administration_diary'] eq 1)">
@@ -43,7 +43,7 @@
             </ul>	
         </li>
         </if>
-        <li class="treeview <?php if($parent == 6) echo 'active'; ?>">
+        <!--<li class="treeview <?php if($parent == 6) echo 'active'; ?>">
         	<a href="#">
             	<i class="fa fa-file"></i> <span>文件传输</span>
             </a>
@@ -52,7 +52,7 @@
             	<li <?php if($parent == 6 AND $sub == 2) echo 'class="active"';?>><a href="{:U('Home/File/index?type=fromMe')}"><i class="fa fa-angle-double-right"></i>我发送的文件</a></li>
                 <li <?php if($parent == 6 AND $sub == 3) echo 'class="active"';?>><a href="{:U('Home/File/index?type=toMe')}"><i class="fa fa-angle-double-right"></i>我接收的文件</a></li>
             </ul>	
-        </li>
+        </li>-->
         <li class="treeview <?php if($parent == 4) echo 'active'; ?>">
         	<a href="#">
             	<i class="fa fa-th"></i> <span>公告信息</span>
@@ -68,7 +68,7 @@
                 <li <?php if($parent == 4 AND $sub == 4) echo 'class="active"';?>><a href="{:U('Home/Article/index?type=2')}"><i class="fa fa-angle-double-right"></i>管理制度</a></li>
             </ul>	
         </li>
-        <li class="treeview <?php if($parent == 5) echo 'active'; ?>">
+        <!--<li class="treeview <?php if($parent == 5) echo 'active'; ?>">
         	<a href="#">
             	<i class="fa fa-folder"></i> <span>数据包管理</span>
             </a>
@@ -76,11 +76,11 @@
             	<li <?php if($parent == 5 AND $sub == 1) echo 'class="active"';?>><a href="{:U('Home/Package/add')}"><i class="fa fa-angle-double-right"></i>上传</a></li>
                 <li <?php if($parent == 5 AND $sub == 2) echo 'class="active"';?>><a href="{:U('Home/Package/index')}"><i class="fa fa-angle-double-right"></i>列表</a></li>
                 <if condition="session('group_id') eq 1">
-                <!--<li><a href="{:U('Home/Package/ftpSettings')}"><i class="fa fa-angle-double-right"></i>FTP配置</a></li>-->
+                <li><a href="{:U('Home/Package/ftpSettings')}"><i class="fa fa-angle-double-right"></i>FTP配置</a></li>
                 </if>
             </ul>
-        </li>
-        <if condition="session('group_id') eq 1 OR session('access_judge') eq 1">
+        </li>-->
+        <!--<if condition="session('group_id') eq 1 OR session('access_judge') eq 1">
         <li class="treeview <?php if($parent == 7) echo 'active'; ?>">
         	<a href="#">
             	<i class="fa fa-circle-o"></i> <span>评优管理</span>
@@ -95,7 +95,7 @@
                 <li <?php if($parent == 7 AND $sub == 5) echo 'class="active"';?>><a href="{:U('Home/Nominate/index')}"><i class="fa fa-angle-double-right"></i>提名总览</a></li>
             </ul>	
         </li>
-        </if>
+        </if>-->
         <if condition="session('group_id') eq 1">
         <li class="treeview <?php if($parent == 8) echo 'active'; ?>">
         	<a href="#">
@@ -120,11 +120,12 @@
             </ul>	
         </li>
         </if>
+        <if condition="session('group_id') eq 1 OR session('group_id') eq 3 OR session('group_id') eq 7 OR session('access')['option_receive'] eq 1 OR session('department_id') eq 5">
         <li class="treeview <?php if($parent == 10) echo 'active'; ?>">
             <a href="#">
             	<i class="fa fa-gears"></i> <span>元器件管理</span>
             </a>
-        	<ul class="treeview-menu">
+        	<ul class="treeview-menu" style="display:block;">
             	<li <?php if($parent == 10 AND $sub == 2) echo 'class="active"';?>><a href="{:U('Home/Material/Index')}"><i class="fa fa-angle-double-right"></i>库存单</a></li>
                 <if condition="session('group_id') eq 1">
                 <li <?php if($parent == 10 AND $sub == 1) echo 'class="active"';?>><a href="{:U('Home/Material/categoryIndex')}"><i class="fa fa-angle-double-right"></i>分类管理</a></li>
@@ -132,22 +133,25 @@
                 <li <?php if($parent == 10 AND $sub == 5) echo 'class="active"';?>><a href="{:U('Home/Material/buyApplyAdd')}"><i class="fa fa-angle-double-right"></i>采购申请</a></li>
                 <if condition="session('group_id') eq 1 OR session('access')['option_finalbuyapply'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 6) echo 'class="active"';?>><a href="{:U('Home/Material/finalBuyApplyAdd')}"><i class="fa fa-angle-double-right"></i>采购汇总</a></li>
+                <else/>
+                <li <?php if($parent == 10 AND $sub == 6) echo 'class="active"';?>><a href="{:U('Home/Material/finalBuyApplyIndex')}"><i class="fa fa-angle-double-right"></i>采购汇总</a></li>
                 </if>
                 <if condition="session('group_id') eq 1 OR session('access')['option_buyconfirm'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 7) echo 'class="active"';?>><a href="{:U('Home/Material/buyConfirmAdd')}"><i class="fa fa-angle-double-right"></i>采购确认</a></li>
+                <else/>
+                <li <?php if($parent == 10 AND $sub == 7) echo 'class="active"';?>><a href="{:U('Home/Material/buyConfirmIndex')}"><i class="fa fa-angle-double-right"></i>采购确认</a></li>
                 </if>
                 <if condition="session('group_id') eq 1 OR session('access')['option_buycheckout'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 8) echo 'class="active"';?>><a href="{:U('Home/Material/buyCheckout')}"><i class="fa fa-angle-double-right"></i>采购审批</a></li>
+                <else/>
+                <li <?php if($parent == 10 AND $sub == 8) echo 'class="active"';?>><a href="{:U('Home/Material/buyCheckoutIndex')}"><i class="fa fa-angle-double-right"></i>采购审批</a></li>
                 </if>
                 <if condition="session('group_id') eq 1 OR session('access')['option_receive'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 9) echo 'class="active"';?>><a href="{:U('Home/Material/receiveAdd')}"><i class="fa fa-angle-double-right"></i>采购收货</a></li>
                 </if>
-                <if condition="session('group_id') eq 1 OR session('access')['option_receive'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 3) echo 'class="active"';?>><a href="{:U('Home/Material/receiveIndex')}"><i class="fa fa-angle-double-right"></i>入库单</a></li>
-                </if>
-                <if condition="session('group_id') eq 1 OR session('access')['option_materialuses'] eq 1">
                 <li <?php if($parent == 10 AND $sub == 4) echo 'class="active"';?>><a href="{:U('Home/Material/usesIndex')}"><i class="fa fa-angle-double-right"></i>使用单</a></li>
-                </if>
             </ul>	
         </li>
+        </if>
       </ul>

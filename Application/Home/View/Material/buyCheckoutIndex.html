@@ -1,7 +1,7 @@
 <include file="./Application/Member/View/Public/header.html"/>
 <div class="box">
     <div class="box-header">
-      <h3 class="box-title">审批通过列表  &nbsp;&nbsp; <a href="{:U('Home/Material/buyCheckout')}" class="btn btn-info btn-flat btn-xs">待审批</a></h3>
+      <h3 class="box-title">审批通过列表  &nbsp;&nbsp; <if condition="session('group_id') eq 1 OR session('access')['option_buycheckout'] eq 1"><a href="{:U('Home/Material/buyCheckout')}" class="btn btn-info btn-flat btn-xs">待审批</a></if></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">

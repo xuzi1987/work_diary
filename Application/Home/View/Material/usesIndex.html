@@ -17,7 +17,7 @@ $(function(){
             <li><input type="text" class="form-control datetime" name="srchregdatestart" value="{$srchregdatestart}"></li>
             <li>-</li>
             <li><input type="text" class="form-control datetime" name="srchregdateend" value="{$srchregdateend}"></li>
-            <li><input type="submit" value="提交" class="btn btn-primary" /> &nbsp;&nbsp;&nbsp;&nbsp; <a class="btn btn-info btn-flat" href="{:U('Home/Material/usesAdd')}">新增出库记录</a></li>
+            <if condition="session('group_id') eq 1 OR session('access')['option_materialuses'] eq 1"><li><input type="submit" value="提交" class="btn btn-primary" /> &nbsp;&nbsp;&nbsp;&nbsp; <a class="btn btn-info btn-flat" href="{:U('Home/Material/usesAdd')}">新增出库记录</a></li></if>
         </ul>
       </form>
     </div>

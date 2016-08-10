@@ -55,7 +55,13 @@ $(function(){
                     	<if condition="$k eq 1">
                     	<td rowspan="{:count($data['applylist'])}">{$data.username}</td>
                         </if>
-                        <td>NULL</td>
+                        <td>
+                        <if condition="$applylist['code']">
+                        {$applylist.code}
+                        <else/>
+                        <input type="text" name="codes[]" class="form-control">
+                        </if>
+                        </td>
                         <td>{$applylist.manufacturer}</td>
                         <td>{$applylist.partnumber}</td>
                         <td>{$applylist.package}</td>
@@ -77,8 +83,8 @@ $(function(){
                         <td>{$applylist.tax}</td>
                         <td>{$applylist.express}</td>
                         <td>
-                        <input type="hidden" name="apply_ids[]" class="form-control" value="{$applylist.apply_id}">
-                        <input type="hidden" name="applylist_ids[]" class="form-control" value="{$applylist.id}">
+                        <input type="hidden" name="apply_ids[]" value="{$applylist.apply_id}">
+                        <input type="hidden" name="applylist_ids[]" value="{$applylist.id}">
                         {$applylist.advance_payment}</td>
                         <if condition="$applylist['shipping_progress'] neq '已到货'">
                         <td>

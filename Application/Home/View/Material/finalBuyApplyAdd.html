@@ -47,7 +47,7 @@ $(function(){
                         <td>{$applylist.manufacturer}</td>
                         <td>{$applylist.partnumber}</td>
                         <td>{$applylist.package}</td>
-                        <td>{$applylist.quantity}</td>
+                        <td><input type="text" name="quantity[]" value="{$applylist.quantity}" class="form-control"/></td>
                         <td>{$applylist.description}</td>
                         <td>{:date('m-d', strtotime($applylist['receive_time']))}</td>
                         <td>

@@ -1,7 +1,7 @@
 <include file="./Application/Member/View/Public/header.html"/>
 <div class="box">
     <div class="box-header">
-      <h3 class="box-title">采购汇总列表 &nbsp;&nbsp; <a href="{:U('Home/Material/finalBuyApplyAdd')}" class="btn btn-info btn-flat btn-xs">添加采购汇总</a></h3>
+      <h3 class="box-title">采购汇总列表 &nbsp;&nbsp; <if condition="session('group_id') eq 1 OR session('access')['option_finalbuyapply'] eq 1"><a href="{:U('Home/Material/finalBuyApplyAdd')}" class="btn btn-info btn-flat btn-xs">添加采购汇总</a></if></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">

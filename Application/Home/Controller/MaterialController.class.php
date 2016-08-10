@@ -175,9 +175,6 @@ class MaterialController extends CommonController {
     }
     
     public function finalBuyApplyIndex(){
-    	if (session('group_id') > 1 && !session('access')['option_finalbuyapply']) {
-    		$this->error('没有权限查看此页面...', U('Index/index'));
-    	}
     	$count = M('finalbuyapply')->count();
     	$Page = new \Think\Page($count,25);
     	$Page->setConfig('prev','上一页');
@@ -237,7 +234,8 @@ class MaterialController extends CommonController {
     				
     				M('buyapplylist')->where("id='".intval($value)."'")->save(
 	    				array(
-		    				'status'=>2
+		    				'status'=>2,
+		    				'quantity'=>intval($_POST['quantity'][$key])
 	    				)
     				);
     			}
@@ -254,11 +252,8 @@ class MaterialController extends CommonController {
     }
     
     public function buyConfirmIndex(){
-    	if (session('group_id') > 1 && !session('access')['option_buyconfirm']) {
-    		$this->error('没有权限查看此页面...', U('Index/index'));
-    	}
     	$map = array();
-    	$map['status'] = array('egt', 1);
+    	$map['status'] = array('gt', 1);
     	$count = M('finalbuyapply')->where($map)->count();
     	$Page = new \Think\Page($count,4);
     	foreach($map as $key=>$val) {
@@ -350,11 +345,8 @@ class MaterialController extends CommonController {
     }
     
     public function buyCheckoutIndex(){
-    	if (session('group_id') > 1 && !session('access')['option_buycheckout']) {
-    		$this->error('没有权限查看此页面...', U('Index/index'));
-    	}
     	$map = array();
-    	$map['status'] = array('egt', 2);
+    	$map['status'] = array('gt', 2);
     	$count = M('finalbuyapply')->where($map)->count();
     	$Page = new \Think\Page($count,2);
     	foreach($map as $key=>$val) {
@@ -507,19 +499,19 @@ class MaterialController extends CommonController {
     				$finalbuyapply['applylist'][$finalbuyapplylist['apply_id']]['username'] = $buyapply['username'];
     				$finalbuyapply['applylist'][$finalbuyapplylist['apply_id']]['datetime'] = $buyapply['datetime'];
     				
-    				if($buyapply['user_id'] == session('uid')){
+    				if($buyapply['user_id'] == session('uid') || session('uid') == 207){
     					$finalbuyapply['is_proposer'][$buyapply['user_id']] = 1;
     				}
     				if(session('uid') == 207){
     					$finalbuyapply['is_optiontor'] = 1;
     				}
-    				if(session('uid') == 33){
+    				if(session('uid') == 33 || session('uid') == 207){
     					$finalbuyapply['is_header'] = 1;
     				}
-    				if(session('uid') == 34 || session('uid') == 169){
+    				if(session('uid') == 34 || session('uid') == 169 || session('uid') == 207){
     					$finalbuyapply['is_teamleader'] = 1;
     				}
-    				if(session('uid') == 80){
+    				if(session('uid') == 80 || session('uid') == 207){
     					$finalbuyapply['is_administrator'] = 1;
     				}
     			}
@@ -551,9 +543,6 @@ class MaterialController extends CommonController {
     }
     
     public function receiveIndex(){
-    	if (session('group_id') > 1 && !session('access')['option_receive']) {
-    		$this->error('没有权限查看此页面...', U('Index/index'));
-    	}
     	$map = array();
     	$map['diary_receive.shipping_progress'] = '已到货';
     	
@@ -647,7 +636,7 @@ class MaterialController extends CommonController {
     					if($buyapplylist['code']){
     						M('material')->where("code='".$buyapplylist['code']."'")->save("stock=stock+".$buyapplylist['quantity']);
     					}else{
-    						$code = '';
+    						$code = $_POST['codes'][$key];
     						$buyconfirm = M('buyconfirm')->where("applylist_id='".intval($value)."'")->find();
     						$material_data = array(
     								'code'         =>$code,
