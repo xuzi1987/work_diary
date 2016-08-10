@@ -1,1 +1,4 @@
 Application/Runtime/*
+.settings/*
+.project
+.buildpath
