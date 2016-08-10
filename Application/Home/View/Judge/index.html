@@ -1,0 +1,36 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">评委列表</h3> &nbsp;&nbsp; <if condition="session('access')['option_article'] eq 1"> <a href="{:U('Home/Judge/add')}" class="btn btn-info btn-flat btn-xs">添加评委</a></if>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th><strong>ID</strong></th>
+                    <th><strong>姓名</strong></th>
+                    <th><strong>添加时间</strong></th>
+                    <th><strong>操作</strong></th>
+                </tr>
+                <volist name="list" id="data">
+                    <tr>
+                        <td rowspan="{$data.rowspan}">{$data.userid}</td>
+                        <td rowspan="{$data.rowspan}">{$data.username}</td>
+                        <td rowspan="{$data.rowspan}">{$data.datetime}</td>
+                        <td rowspan="{$data.rowspan}">
+                        <if condition="session('group_id') eq 1"> 
+                            &nbsp;&nbsp; <a href="{:U('Home/Judge/delete?userid='.$data['userid'])}">删除</a>
+                        </if>
+                        </td>
+                    </tr>
+                </volist>
+            </table>
+        <else />
+            <div class="note">
+                <p class="i">目前没有相关记录!</p>
+            </div>
+        </if>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

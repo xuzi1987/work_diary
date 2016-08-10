@@ -1,0 +1,21 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <if condition="$type">
+        <if condition="$type eq 3">
+            <h3 class="box-title"><a href="{:U('Home/Article/index?type=3')}" class="btn btn-info btn-flat">项目进度公告历史记录 <i class="fa fa-long-arrow-right"></i></a></h3>
+        </if>
+        <if condition="$type eq 4">
+            <h3 class="box-title"><a href="{:U('Home/Article/index?type=4')}" class="btn btn-info btn-flat">项目测试公告历史记录 <i class="fa fa-long-arrow-right"></i></a></h3>
+        </if>
+    <else/>
+        <h3 class="box-title">公告列表 &nbsp;&nbsp; <if condition="session('access')['option_article'] eq 1"> <a href="{:U('Home/Article/add')}" class="btn btn-info btn-flat btn-xs">添加公告</a></if></h3>
+    </if>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:900px;">
+		<h3 style="margin-top:0; margin-bottom:20px;">{$list.title}</h3>
+        <div class="description margin-bottom">作者：{$list.author} &nbsp;&nbsp;&nbsp;&nbsp; 发布时间：{$list.datetime}</div>
+        <div>{:htmlspecialchars_decode($list['content'])}</div>
+    </div>
+<include file="./Application/Member/View/Public/footer.html"/>

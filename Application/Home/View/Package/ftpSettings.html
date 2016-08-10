@@ -1,0 +1,36 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <!-- /.box-header -->
+    <div class="box-body" style="width:800px;">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered">
+					<tr>
+						<td><strong>IP:</strong></td>
+						<td>
+							<input type="text" name="ip" value="{$data.ip}" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>用户名:</strong></td>
+						<td>
+							<input type="text" name="username" value="{$data.username}" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>密码:</strong></td>
+						<td>
+							<input type="text" name="password" value="{$data.password}" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>端口:</strong></td>
+						<td>
+							<input type="text" name="port" value="{$data.port}" class="form-control" />
+						</td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+			</form>
+		</div>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

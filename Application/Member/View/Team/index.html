@@ -1,0 +1,37 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">团队列表  <if condition="session('access')['create_team'] eq 1"><a href="{:U('Team/add')}" class="btn btn-info btn-flat btn-xs">添加团队</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>ID</th>
+                <th>团队名称</th>
+                <th>创始人</th>
+                <th>小组长</th>
+                <if condition="$userid gt 0">
+                <th>我的角色</th> 
+                </if>
+                <th>说明</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr>
+            <volist name="list" id="data">
+                <tr>
+                    <td class="option">{$data.id}</td>
+                    <td>{$data.name}</td>
+                    <td>{$data.authorname}</td>
+                    <td>{$data.leader}</td>
+                    <if condition="$userid gt 0">
+                    <td>{$data.type}</td>
+                    </if>
+                    <td>{$data.description}</td>
+                    <td>{$data.datetime}</td>
+                    <td> <a href="{:U('Team/members?id='.$data['id'])}">查看成员</a> <if condition="($data['type'] eq '小组长') OR (session('group_id') eq 1)"> | <a href="{:U('Team/edit?id='.$data['id'])}">编辑</a> | <a href="{:U('Team/delete?id='.$data['id'])}">删除</a> | <a href="{:U('Team/addmember?id='.$data['id'])}">添加成员</a></if></td>
+                </tr>
+            </volist>	
+        </table>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

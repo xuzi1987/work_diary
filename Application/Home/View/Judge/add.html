@@ -1,0 +1,92 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<style>
+.ajax-list { position:absolute; z-index:100; border:#ddd solid 1px; display:none; padding:0; }
+.ajax-list li { width:238px; padding:2px 5px; list-style:none; background:#fff; }
+.ajax-list li a:hover { color:#F00;}
+</style>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加评委</h3> &nbsp;&nbsp; <a href="{:U('Home/Judge/index')}" class="btn btn-info btn-flat btn-xs">评委列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:600px;">
+        <form action="__SELF__" method="post">
+            <table class="table table-bordered">
+                <tr>
+                    <td><strong>姓名:</strong></td>
+                    <td>
+                        <input id="access_username" type="text" name="username" value="" autocomplete="off" class="form-control"/>
+                        <input id="access_userid" type="hidden" name="userid" value="">
+                        <div style="position:relative;">
+                            <ul id="userlist" class="ajax-list"></ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" tabindex="3" /></div>
+        </form>
+    </div>
+</div>
+<script>
+function Trim(sText){ 
+	return sText.replace(new RegExp("(^[\\s]*)|([\\s]*$)", "g"), ""); 
+}
+$(document).ready(function(e) {
+    $('#access_username').keyup(function(){
+		if(Trim($('#access_username').val())){
+			$.ajax({
+				url: '{:U('Home/Nominate/userlist')}',
+				type: 'get',
+				data: 'srchname='+Trim($('#access_username').val()),
+				dataType: 'json',
+				success: function(json) {
+					$('#userlist').html('');
+					$.each(json, function(item,user){
+						var li = $('<li></li>',{
+							html: '<a id="'+user.userid+'" href="javascript:;">'+user.nickname+'</a>'
+						})
+						li.appendTo('#userlist').bind('click', function(){
+							$('#access_username').val($(this).children('a').html());
+							$('#access_userid').val($(this).children('a').attr('id'));
+							$('#userlist').hide();
+						});
+					})
+					$('#userlist').show();
+				}
+			});
+		}
+	})
+	
+	$('#access_username').click(function(){
+		if(Trim($('#access_username').val())){
+			$.ajax({
+				url: '{:U('Home/Nominate/userlist')}',
+				type: 'get',
+				data: 'srchname='+Trim($('#access_username').val()),
+				dataType: 'json',
+				success: function(json) {
+					$('#userlist').html('');
+					$.each(json, function(item,user){
+						var li = $('<li></li>',{
+							html: '<a id="'+user.userid+'" href="javascript:;">'+user.nickname+'</a>'
+						})
+						li.appendTo('#userlist').bind('click', function(){
+							$('#access_username').val($(this).children('a').html());
+							$('#access_userid').val($(this).children('a').attr('id'));
+							$('#userlist').hide();
+						});
+					})
+					$('#userlist').show();
+				}
+			});
+		}
+	})
+	
+	$('body ').bind('click',function(e){
+		if(e.target.id != 'access_username'){
+			$('#userlist').hide();
+		}
+	})
+});
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

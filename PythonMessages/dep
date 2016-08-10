@@ -1,0 +1,1 @@
+yum -y install python3-wheel python3-pip gobject-introspection

@@ -1,0 +1,125 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">搜索提名</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="srchuserdiv" class="tabcontentcur" style="width:800px;">
+				<form action="__SELF__" method="get">
+				<table width="100%" class="table table-bordered">
+					<tr>
+                    <td>组别:</td>
+					<td>
+                    <select name="srchdepartmentid">
+                        <option value="0">----</option>	
+                        <volist name="department_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchdepartmentid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>
+                    <!--<td>项目组:</td>
+					<td>
+                    <select name="srchprojectid">
+                        <option value="0">----</option>	
+                        <volist name="project_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchprojectid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>-->
+                    <td>奖项:</td>
+					<td>
+                    <select name="srchmedalid">
+                        <option value="0">----</option>	
+                        <volist name="medal_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchmedalid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>
+                    <td>提名时间:</td>
+					<td>
+                    年份 <select name="srchyear">
+                    <option value="0">----</option>
+                    <?php 
+                    for($i = intval(date('Y',time()))-10; $i <= intval(date('Y',time())); $i++){
+                    	if($srchyear == $i){
+                        	echo '<option value="'.$i.'" selected>'.$i.'</option>';
+                        }else{
+                        	echo '<option value="'.$i.'">'.$i.'</option>';
+                        }
+                   	}
+                    ?>
+                    </select>  
+                    &nbsp;&nbsp; 季度
+                    <select name="srchquarter">
+                    <option value="0">----</option>
+                    <option value="1" <if condition="$srchquarter == '1'"> selected</if>>第一季度</option>
+                    <option value="2" <if condition="$srchquarter == '2'"> selected</if>>第二季度</option>
+                    <option value="3" <if condition="$srchquarter == '3'"> selected</if>>第三季度</option>
+                    <option value="4" <if condition="$srchquarter == '4'"> selected</if>>第四季度</option>
+                    </select>  
+                    </td>
+                    <td><input type="submit" value="提交" class="btn btn-primary" /></td>
+                    </tr>
+				</table>
+				</form>
+			</div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">提名列表</h3> &nbsp;&nbsp; <a href="{:U('Home/Nominate/selfbymedal')}" class="btn btn-success btn-flat btn-xs">按奖项浏览</a>  &nbsp;&nbsp; <a href="{:U('Home/Nominate/export?type=selfview&srchdepartmentid='.$srchdepartmentid.'&srchprojectid='.$srchprojectid.'&srchmedalid='.$srchmedalid.'&srchyear='.$srchyear.'&srchquarter='.$srchquarter)}" class="btn btn-info btn-flat btn-xs">导出Excel(按候选人浏览)</a>  &nbsp;&nbsp; <a href="{:U('Home/Nominate/export?type=selfbymedal&srchdepartmentid='.$srchdepartmentid.'&srchprojectid='.$srchprojectid.'&srchmedalid='.$srchmedalid.'&srchyear='.$srchyear.'&srchquarter='.$srchquarter)}" class="btn btn-info btn-flat btn-xs">导出Excel(按奖项浏览)</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+			<if condition="$list">
+				<table class="table table-bordered">
+					<tr>
+                        <th width="100"><strong>候选人</strong></th>
+                        <volist name="medal_list" id="data">
+                        <th class="medal"><strong>{$data.name}</strong></th>
+                        </volist>
+					</tr>
+					<volist name="list" id="data">
+					<tr>	
+                        <td>{$data[0].access_username}</td>
+                        <volist name="medal_list" id="medal">
+                           <td class="nominate_option">
+                           <volist name="data" id="sub">
+                           <if condition="$sub[medal_id] == $medal[id]">
+                           <if condition="$sub[is_email] == 0">
+                           <if condition="$sub[status] == 1">
+                           <a href="{:U('Home/Nominate/publish?id='.$sub['id'])}" class="text-yellow" title="发布后其他评委可在'提名总览'页看到">发布</a>
+                           <else/>
+                           <a href="{:U('Home/Nominate/unpublish?id='.$sub['id'])}" title="取消发布只能自己可见">取消发布</a>
+                           </if>
+                        &nbsp;&nbsp; <a href="{:U('Home/Nominate/edit?id='.$sub['id'])}">编辑</a>
+                        &nbsp;&nbsp; <a href="{:U('Home/Nominate/delete?id='.$sub['id'])}">删除</a>
+                        <br/>
+                        </if>
+                        
+                        <if condition="$sub[is_email] == 0 AND $sub[status] == 2">
+                        &nbsp;&nbsp; <a href="{:U('Home/Nominate/email?id='.$sub['id'])}" class="text-yellow">邮件通知候选人</a><br/>
+                        </if>
+                        <if condition="$sub[is_email] == 1">
+                        &nbsp;&nbsp; <span class="text-green">已通知候选人</span><br/>
+                        </if>
+                        {$sub.datetime}
+                           </if>
+                           </volist>
+                           </td>
+                        </volist>
+                    </tr>
+					</volist>
+                    <!--<tr class="nobg">
+						<td class="tdpage" colspan="11"><div class="pager">{$page}</div></td>
+					</tr>-->
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

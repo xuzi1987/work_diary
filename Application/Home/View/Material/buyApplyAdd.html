@@ -1,0 +1,121 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<link rel="stylesheet" href="__PUBLIC__/plugins/dropList/dropList.css" type="text/css" media="all" />
+<script src="__PUBLIC__/plugins/dropList/jquery.dropList.1.0.0.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css" type="text/css" media="all" />
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" type="text/javascript"></script>
+<script>
+$(function(){
+	init();
+	$('#addBtn').bind('click', function(){
+		var html = '';
+		html += '<tr><td><div class="dList_wrapper"><select class="dlist" name="dList_manufacturer[]">';
+		<volist name="manufacturers" id="data">
+		html += '<option value="{$data.manufacturer}">{$data.manufacturer}</option>';
+		</volist>
+		html += '</select></div></td><td><div class="dList_wrapper"><select class="dlist" name="dList_partnumber[]">';
+		<volist name="partnumbers" id="data">
+		html += '<option value="{$data.partnumber}">{$data.partnumber}</option>';
+		</volist>
+		html += '</select></div></td>';
+		html += '<td><input type="text" name="package[]" class="form-control"></td>';
+		html += '<td><input type="text" name="quantity[]" class="form-control"></td>';
+		html += '<td><div class="dList_wrapper"><select class="dlist" name="dList_project[]">';
+		<volist name="projects" id="data">
+		html += '<option value="{$data.project}">{$data.project}</option>';
+		</volist>
+		html += '</select></div></td>';
+		html += '<td><input type="text" name="description[]" class="form-control"></td>';
+		html += '<td><input type="text" name="receive_time[]" class="form-control datetime" autocomplete="off"></td>';
+		html += '<td><select name="is_emergency[]"><option value="1">紧急</option><option value="2">不紧急</option></select></td>';
+		html += '<td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td></tr>';
+		$('#mainTable').append(html);
+		init();
+	})
+})
+
+function init(){
+	$('.dlist').each(function() {
+        $(this).dropList({
+			search: true
+		});
+    });
+	
+	$('.datetime').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+	
+	$('.deleteBtn').each(function(index, element) {
+		$(this).unbind('click');
+        $(this).bind('click', function(){
+			if(confirm("确定删除吗？")){
+				$(this).parent().parent().remove();
+			}
+		})
+    });
+}
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加采购 &nbsp;&nbsp; <a href="{:U('Home/Material/buyApplyIndex')}" class="btn btn-info btn-flat btn-xs">采购申请列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form action="__SELF__" method="post">
+        <table id="mainTable" class="table table-bordered">
+            <tr>
+                <th width="200">Manufacturers.Mfr.Name</th>
+                <th>Manufacturers.Mfr.Part.Number</th>
+                <th>Package</th>
+                <th width="60">Buy.Qty</th>
+                <th width="200">Project</th>
+                <th>Description</th>
+                <th width="110">需要到货时间</th>
+                <th width="80">是否紧急</th>
+                <th width="40">&nbsp;</th>
+            </tr>
+            <tr>
+                <td>
+                <div class="dList_wrapper">
+                <select class="dlist" name="dList_manufacturer[]">
+                  <volist name="manufacturers" id="data">
+                  <option value="{$data.manufacturer}">{$data.manufacturer}</option>
+                  </volist>
+                </select>
+                </div>
+                </td>
+                <td>
+                <div class="dList_wrapper">
+                <select class="dlist" name="dList_partnumber[]">
+                  <volist name="partnumbers" id="data">
+                  <option value="{$data.partnumber}">{$data.partnumber}</option>
+                  </volist>
+                </select>
+                </div>
+                </td>
+                <td><input type="text" name="package[]" class="form-control"></td>
+                <td><input type="text" name="quantity[]" class="form-control"></td>
+                <td>
+                <div class="dList_wrapper">
+                <select class="dlist" name="dList_project[]">
+                  <volist name="projects" id="data">
+                  <option value="{$data.project}">{$data.project}</option>
+                  </volist>
+                </select>
+                </div>
+                </td>
+                <td><input type="text" name="description[]" class="form-control"></td>
+                <td><input type="text" name="receive_time[]" class="form-control datetime" autocomplete="off"></td>
+                <td>
+                <select name="is_emergency[]">
+                    <option value="1">紧急</option>
+                    <option value="2">不紧急</option>
+                 </select>
+                </td>
+                <td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td>
+            </tr>
+        </table>
+        <div class="opt"><input type="button" id="addBtn" value="添加行" class="btn btn-info"/> &nbsp;&nbsp; <input type="submit" name="submit" value="提交申请" class="btn btn-primary" /></div>
+    </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

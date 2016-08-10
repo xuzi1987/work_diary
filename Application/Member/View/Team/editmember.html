@@ -1,0 +1,30 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加团队成员： <a href="{:U('Team/edit?id='.$team['id'])}" class="btn btn-primary btn-flat btn-xs">{$team.name}</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <form action="__SELF__" method="post" class="form-horizontal">
+    <div class="box-body" style="width:600px;">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="username">选择用户:</label>
+          <div class="col-sm-10">
+            <input type="text" id="username" value="{$list.nickname}" class="form-control" readonly />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="type">角色:</label>
+          <div class="col-sm-10">
+            <select name="type" id="type" class="form-control">
+                <option value="2"<if condition="$list['type'] == 2"> selected</if>>成员</option>
+                <option value="1"<if condition="$list['type'] == 1"> selected</if>>组长</option>
+            </select>
+            <input type="hidden" id="userid" name="userid" value="{$list.userid}" />
+            <input type="hidden" name="teamid" value="{$team.id}" />
+          </div>
+        </div>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+    </div>
+    </form>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

@@ -1,0 +1,105 @@
+<?php
+$currentParam = getCurrentNav();
+$parent = $currentParam['parent'];
+$sub = $currentParam['sub'];
+$title = $currentParam['title'];
+?>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$title} -- 芯动科技OA系统</title>
+<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/dist/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/dist/css/fonts.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/select2/select2.min.css" type="text/css" media="all" />
+<link rel="stylesheet" href="__PUBLIC__/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/dist/css/skins/_all-skins.min.css">
+<script src="__PUBLIC__/plugins/jQuery/jquery-1.9.1.min.js"></script> 
+<script src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script> 
+<script src="__PUBLIC__/dist/js/app.min.js"></script>
+<script>
+var userAgent = navigator.userAgent.toLowerCase();
+var is_opera = userAgent.indexOf('opera') != -1 && opera.version();
+var is_moz = (navigator.product == 'Gecko') && userAgent.substr(userAgent.indexOf('firefox') + 8, 3);
+var is_ie = (userAgent.indexOf('msie') != -1 && !is_opera) && userAgent.substr(userAgent.indexOf('msie') + 5, 3);
+function checkall(name) {
+	var e = is_ie ? event : checkall.caller.arguments[0];
+	obj = is_ie ? e.srcElement : e.target;
+	var arr = document.getElementsByName(name);
+	var k = arr.length;
+	for(var i=0; i<k; i++) {
+		arr[i].checked = obj.checked;
+	}
+}
+</script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/dist/js/html5shiv.min.js"></script>
+<script src="__PUBLIC__/dist/js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <header class="main-header"> 
+    <!-- Logo --> 
+    <a href="__APP__" class="logo"> 
+    <!-- mini logo for sidebar mini 50x50 pixels --> 
+    <span class="logo-mini"><b>芯动</b></span> 
+    <!-- logo for regular state and mobile devices --> 
+    <span class="logo-lg"><b>芯动科技OA系统</b></span> </a> 
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top"> 
+      <!-- Sidebar toggle button--> 
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- User Account: style can be found in dropdown.less -->
+          <if condition="session('new_article')">
+          <li class="notifications-menu">
+          	<a href="{:U('Home/Article/index')}" title="公告">
+              <i class="fa fa-bullhorn"></i>
+              <span class="label label-success">{:session('new_article')}</span>
+            </a>
+          </li>
+          </if>
+          <if condition="session('new_message')">
+          <li class="notifications-menu">
+          	<a href="{:U('Home/Message/index?userid='.session('uid'))}" title="提醒">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">{:session('new_message')}</span>
+            </a>
+          </li>
+          </if>
+          <if condition="session('new_task')">
+          <li class="notifications-menu">
+          	<a href="{:U('Home/Project/index?userid='.session('uid'))}" title="任务">
+              <i class="fa fa-flag-o"></i>
+              <span class="label label-danger">{:session('new_task')}</span>
+            </a>
+          </li>
+          </if>
+          <li class="user user-menu"><a href="#"> <span class="hidden-xs">{:session('nickname')}</span> </a> </li>
+          <if condition="session('no_diary_days')"><li class="user user-menu"><a href="#" class="text-yellow">您已有{:session('no_diary_days')}天未写日报</a></li></if>
+          <li class="user user-menu"> <a href="{:U('Member/Login/logout')}" target="_top" class="text-gray">退出 <i class="fa fa-sign-out"></i> </a> </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar"> 
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar"> 
+      <!-- sidebar menu: : style can be found in sidebar.less --> 
+      <include file="./Application/Member/View/Public/menu.html"/>
+    </section>
+    <!-- /.sidebar --> 
+  </aside>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper"> 
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">

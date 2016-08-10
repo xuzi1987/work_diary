@@ -1,0 +1,50 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script>
+var percent = 0;
+function publish(id){
+	$('#btnSubmit').attr('disabled', 'disabled');
+	$.ajax({
+		url: '{:U('Home/Package/publish')}',
+		type: 'get',
+		data: 'id='+id+'&ftp_path='+$('#ftp_path').val(),
+		dataType: 'html',
+		async:true,
+		success: function(time) {
+			setTimeout("$('#btnSubmit').val('上传成功!');", 500)
+			setTimeout("window.location.href='{:U('Home/Package/index')}'", 1000)
+		}
+	});
+}
+</script>
+<style>
+.publis_btn { color:#F00; font-weight:700; }
+.publis_btn img { display:none;}
+.progress { width:140px; height:5px; border:#ccc solid 1px; background:#fafafa; display:none; }
+.progress i { display:inline-block; width:0; height:5px; background:#73b304; }
+</style>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">上传至FTP服务器</h3> &nbsp;&nbsp; <a href="{:U('Home/Package/index')}" class="btn btn-info btn-flat btn-xs">列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:800px;">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered">
+					<tr>
+						<td><strong>数据包路径(加密版):</strong></td>
+						<td>
+							{$list.file_path}.asc
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>FTP存放路径:</strong></td>
+						<td>
+							<input type="text" id="ftp_path" name="ftp_path" value="{$list.ftp_path}" class="form-control" />（例如：项目名称/客户名称）
+						</td>
+					</tr>
+				</table>
+				<div class="opt"><input id="btnSubmit" type="button" value="上传" class="btn btn-primary" onClick="publish({$list.id});" /></div>
+			</form>
+		</div>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

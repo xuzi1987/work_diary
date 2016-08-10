@@ -1,0 +1,32 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑分类 &nbsp;&nbsp; <a href="{:U('Home/Material/categoryIndex')}" class="btn btn-info btn-flat btn-xs">分类列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form action="__SELF__" method="post">
+            <table class="table table-bordered" style="width:500px;">
+                <tr>
+                    <td><strong>名称:</strong></td>
+                    <td>
+                        <input type="text" name="name" value="{$list.name}" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>CODE:</strong></td>
+                    <td>
+                        <input type="text" name="code" value="{$list.code}" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>排序:</strong></td>
+                    <td>
+                        <input type="text" name="sort" value="{$list.sort}" class="form-control" />
+                    </td>
+                </tr>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

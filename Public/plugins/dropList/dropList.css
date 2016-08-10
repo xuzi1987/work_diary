@@ -1,0 +1,107 @@
+.dList_wrapper{
+	position:relative;
+}
+.dList_wrapper .default{
+	position:absolute;
+	left:10px;
+	top:8px;
+	z-index:1;
+}
+.dListholder{ 
+	background: #fff;
+	font-size: 13px;
+	font-weight: 300;
+	min-height: 34px;
+	border:#d2d6de solid 1px;
+	position:relative;
+}
+.dListText{
+	padding: 5px 25px 5px 10px;
+	color: #333; 
+	font-family:"Lucida Sans", Arial, Helvetica, sans-serif; 
+	float: left;
+	overflow:hidden;
+	width:100%;
+}
+.dListBtn{
+	background: url(../images/drop_btn.png);
+	width:25px;
+	height: 19px;
+	right: 6px;
+	top: 5px;
+	position:absolute;
+}
+.dListBtn,.dListText:hover{
+	cursor: pointer;
+
+}
+.dListdivider{
+	height:10px;
+	display:none;
+}
+.dListdrop{
+	background: #fff;
+	position: absolute;
+	z-index: 10;
+	display: none;
+	border:#d2d6de solid 1px;
+	border-top:none;
+	width:100%;
+	box-sizing:border-box;
+}
+.dlitem{
+	padding: 3px 5px;
+	font-family:"Lucida Sans", Arial, Helvetica, sans-serif; 
+	font-size: 13px;
+	margin-bottom: 1px;
+}
+.dlithov:hover{
+	background: #3c8dbc;
+	cursor: pointer;
+	color: #fff;
+}
+.fleft{ float:left;}
+.ItemAdded{
+	background: #ffa2a4;
+	color: #000;
+}
+.dlsearch{ 
+	width:100%; 
+	height: 34px; 
+	background: none; 
+	border: none;
+	padding: 0px 3px; 
+	font-size: 13px;
+	color:#333;
+}
+.dlsearch:focus {
+outline: none; 
+}
+.reducepad{ 
+padding: 0 20px 0 6px; 
+height: 34px;
+
+}
+::-webkit-input-placeholder {
+   color: white;
+   font-family: "Lucida Sans", Arial, Helvetica, sans-serif;
+   font-size: 13px;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: white; 
+    font-family: "Lucida Sans", Arial, Helvetica, sans-serif; 
+    font-size: 13px;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: white; 
+   font-family: "Lucida Sans", Arial, Helvetica, sans-serif;
+   font-size: 13px;
+}
+
+:-ms-input-placeholder {  
+    color: white;
+    font-family: "Lucida Sans", Arial, Helvetica, sans-serif; 
+    font-size: 13px;
+}

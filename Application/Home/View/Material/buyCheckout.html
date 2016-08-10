@@ -1,0 +1,163 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">待审批  &nbsp;&nbsp; <a href="{:U('Home/Material/buyCheckoutIndex')}" class="btn btn-info btn-flat btn-xs">审批通过列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+        <form action="__SELF__" method="post">
+            <volist name="list" id="rs">
+            <table class="table table-bordered">
+            	<tr>
+                    <td colspan="17">汇总人： <b>{$rs.username}</b> &nbsp;&nbsp; {:date('Y-m-d', strtotime($rs['datetime']))}</td>
+                </tr>
+                <tr>
+                	<th width="60">申请人</th>
+                    <th>CODE</th>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th width="60">Buy.Qty</th>
+                    <th>Description</th>
+                    <th width="100">需要到货时间</th>
+                    <th width="70">是否紧急</th>
+                    <th>Project</th>
+                    <th>供应商推荐</th>
+                    <th>预计货运周期</th>
+                    <th>单价</th>
+                    <th>优惠</th>
+                    <th>发票税</th>
+                    <th>快递费</th>
+                    <th>预付款</th>
+                </tr>
+                <volist name="rs['applylist']" id="data">
+                    <volist name="data['applylist']" id="applylist" key="k">
+                    <tr>
+                    	<if condition="$k eq 1">
+                    	<td rowspan="{:count($data['applylist'])}">{$data.username}<input type="hidden" name="proposers[{$rs.id}][]" value="{$data.user_id}" /></td>
+                        </if>
+                        <td>NULL</td>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td class="quanity">{$applylist.quantity}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{:date('Y-m-d', strtotime($applylist['receive_time']))}</td>
+                        <td>
+                        <if condition="$applylist['is_emergency'] eq 1">
+                        紧急
+                        <else />
+                        不紧急
+                        </if>
+                        </td>
+                        <td>{$applylist.project}</td>
+                        <td>{$applylist.supplier}</td>
+                        <td>{$applylist.shipping_time}</td>
+                        <td>{$applylist.price}</td>
+                        <td>{$applylist.discount}</td>
+                        <td>{$applylist.tax}</td>
+                        <td>{$applylist.express}</td>
+                        <td>{$applylist.advance_payment}</td>
+                    </tr>
+                    </volist>	
+                </volist>
+                <tr><td colspan="17">
+                <table>
+                	<tr>
+                    <td rowspan="{:count($rs['applylist'])}">申请人：</td>
+                    <td>
+                    <div class="checkbox">
+                    <volist name="rs['applylist']" id="data" key="k"><if condition="$k eq 1">
+                    <label style="margin-right:30px;">
+                    <if condition="$rs['is_proposer'][$data['user_id']] eq 1 && $rs['proposer_checkout'][$data['user_id']] neq 1">
+                    <input type="checkbox" value="1" name="proposer_checkout[{$rs.id}][{$data['user_id']}]"  />
+                    </if> {$data.username}&nbsp;
+                    <if condition="$rs['proposer_checkout'][$data['user_id']] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                  </if></volist>
+                    </div>
+                    </td>
+                  <td rowspan="{:count($rs['applylist'])}" valign="middle"><div class="checkbox">
+                  <input type="hidden" name="final_apply_ids[]" value="{$rs.id}" />
+                  <input type="hidden" name="is_proposer[]" value="{:count($rs['is_proposer'])}" />
+                  <input type="hidden" name="is_optiontor[]" value="{$rs.is_optiontor}" />
+                  <input type="hidden" name="is_header[]" value="{$rs.is_header}" />
+                  <input type="hidden" name="is_teamleader[]" value="{$rs.is_teamleader}" />
+                  <input type="hidden" name="is_administrator[]" value="{$rs.is_administrator}" />
+                  <label style="margin-right:30px;">
+                    <if condition="$rs['is_optiontor'] eq 1 && $rs['optiontor_checkout'] neq 1">
+                    <input type="checkbox" value="1" name="optiontor_checkout[{$rs.id}]"  />
+                    </if> 随同人：李露 &nbsp;
+                    <if condition="$rs['optiontor_checkout'] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                  <label style="margin-right:30px;">
+                    <if condition="$rs['is_header'] eq 1 && $rs['header_checkout'] neq 1">
+                    <input type="checkbox" value="1" name="header_checkout[{$rs.id}]"  />
+                    </if> 部门负责人：盛文金 &nbsp; 
+                    <if condition="$rs['header_checkout'] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                  <label style="margin-right:30px;">
+                    <if condition="$rs['is_teamleader'] eq 1 && $rs['teamleader_checkout'] neq 1">
+                    <input type="checkbox" value="1" name="teamleader_checkout[{$rs.id}]"  />
+                    </if> 组长负责人：姜燚 何颖 &nbsp;
+                    <if condition="$rs['teamleader_checkout'] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                  <label style="margin-right:30px;">
+                    <if condition="$rs['is_administrator'] eq 1 && $rs['administrator_checkout'] neq 1">
+                    <input type="checkbox" value="1" name="administrator_checkout[{$rs.id}]"  />
+                    </if> 行政主管：段丹 &nbsp;
+                    <if condition="$rs['administrator_checkout'] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                </div></td>
+                    </tr>
+                    <tr><td>
+                    <div class="checkbox">
+                    <volist name="rs['applylist']" id="data" key="k"><if condition="$k neq 1">
+                    <label style="margin-right:30px;">
+                    <if condition="$rs['is_proposer'][$data['user_id']] eq 1 && $rs['proposer_checkout'][$data['user_id']] neq 1">
+                    <input type="checkbox" value="1" name="proposer_checkout[{$rs.id}][{$data['user_id']}]"  />
+                    </if> {$data.username}&nbsp;
+                    <if condition="$rs['proposer_checkout'][$data['user_id']] eq 1">
+                     <span class="label label-success">已审核</span>
+                    </if>
+                  </label>
+                  </if></volist>
+                    </div>
+                    </td></tr>
+                </table>
+                </td></tr>
+            </table>
+            </volist> 
+            <div class="opt"><input type="submit" name="submit" value="审核通过" class="btn btn-primary" /></div>
+            
+            </form>
+        <else />
+            <div class="note">
+                <p class="i">目前没有需要审批的采购申请单！</p>
+            </div>
+        </if>
+	</div>
+<script>
+$('.price, .discount, .tax, .express').each(function(index, element) {
+    $(this).bind('blur', function(){
+		var price = Number($(this).parent().parent().find('.price').val())
+		var discount = Number($(this).parent().parent().find('.discount').val())
+		var tax = Number($(this).parent().parent().find('.tax').val())
+		var express = Number($(this).parent().parent().find('.express').val())
+		var quanity = parseInt($(this).parent().parent().find('.quanity').html());
+		$(this).parent().parent().find('.advance_payment').val((price*quanity+tax+express-discount).toFixed(4));
+	})
+});
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

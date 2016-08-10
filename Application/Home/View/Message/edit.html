@@ -1,0 +1,43 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑提醒</h3> &nbsp;&nbsp; <a href="{:U('Home/Message/index')}" class="btn btn-info btn-flat btn-xs">提醒列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:600px;">
+    <form action="__SELF__" method="post">
+		<table class="table table-bordered">
+            <tr>
+                <td>
+                <strong>CODE:</strong>
+                </td>
+                <td>{$list.code}</td>
+            </tr>
+            <tr>
+                <td><strong>接收人:&nbsp;&nbsp;</strong></td>
+                <td>
+                {$list.to_username}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>时间:&nbsp;&nbsp;</strong></td>
+                <td>
+                    <input type="text" name="alert_datetime" value="{:date('Y-m-d', strtotime($list['alert_datetime']))}" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" autocomplete="off" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>内容:&nbsp;&nbsp;</strong></td>
+                <td>
+                    <textarea style="height:100px;" name="msg" class="form-control">{$list.msg}</textarea>
+                </td>
+            </tr>
+        </table>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+    </div>
+</div>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
+<include file="./Application/Member/View/Public/footer.html"/>
+

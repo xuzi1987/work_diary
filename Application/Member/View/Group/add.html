@@ -1,0 +1,30 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加用户组 &nbsp;&nbsp; <a href="{:U('Group/index')}" class="btn btn-info btn-flat btn-xs">用户组列表</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form action="__SELF__" method="post">
+            <table class="table table-bordered table-hover" style="width:500px">
+                <tr>
+                    <th>用户组名称:</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="title" value="" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>说明:</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="description" value="" class="form-control" />
+                    </td>
+                </tr>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

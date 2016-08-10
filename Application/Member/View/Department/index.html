@@ -1,0 +1,26 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">部门列表 <a href="{:U('Department/add')}" class="btn btn-info btn-flat btn-xs">添加部门</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:600px;">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>ID</th>
+                <th>部门名称</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr>
+            <volist name="list" id="data">
+                <tr>
+                    <td class="option">{$data.id}</td>
+                    <td><strong>{$data.name}</strong></td>
+                    <td>{$data.sort}</td>
+                    <td> <a href="{:U('Users/userlist?srchdepartmentid='.$data['id'])}">查看部门成员</a> | <a href="{:U('Department/edit?id='.$data['id'])}">编辑</a> | <a href="{:U('Department/delete?id='.$data['id'])}">删除</a></td>
+                </tr>
+            </volist>	
+        </table>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

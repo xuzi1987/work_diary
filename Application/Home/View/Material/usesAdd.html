@@ -1,0 +1,91 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script>
+$(function(){
+	$('#search_btn').bind('click', function(){
+		$.ajax({
+			url: "{:U('Home/Material/materialSearch')}",
+			type:'POST',
+			dataType: 'json',
+			data: $('#search_form').serialize(),
+			success: function(json) {		
+				if(json){
+					var html = '';
+					$.each(json, function(index, applylist){
+						html += '<tr>';
+						html += '<td>'+applylist.code+'<input type="hidden" name="code[]" value="'+applylist.code+'" /></td>';
+						html += '<td>'+applylist.manufacturer+'</td>';
+						html += '<td>'+applylist.partnumber+'</td>';
+						html += '<td>'+applylist.package+'</td>';
+						html += '<td>'+applylist.description+'</td>';
+						html += '<td><input type="text" class="form-control" name="project[]" /></td>';
+						html += '<td><input type="text" class="form-control" name="quantity[]" /></td>';
+						html += '<td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td>';
+						html += '</tr>';
+					})
+					$('#mainTable').append(html);
+					init();
+				}
+			}
+		});
+	})
+	
+	init();
+})
+
+function init(){
+	$('.deleteBtn').each(function(index, element) {
+		$(this).unbind('click');
+        $(this).bind('click', function(){
+			if(confirm("确定删除吗？")){
+				$(this).parent().parent().remove();
+			}
+		})
+    });
+}
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">填写使用单 &nbsp;&nbsp; <a class="btn btn-info btn-flat btn-xs" href="{:U('Home/Material/usesIndex')}">出库记录</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <form action="__SELF__" id="search_form">
+    	<table class="table table-bordered" style="width:900px; margin-bottom:20px;">
+            <tr>
+            <td width="200">CODE：</td>
+            <td>
+            <input type="text" class="form-control" name="code" value="{$code}" />
+            </td>
+            <td width="160">Manufacturers.Mfr.Name：</td>
+            <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
+            </tr>
+            <tr>
+            <td>Manufacturers.Mfr.Part.Number：</td>
+            <td><input type="text" class="form-control" name="partnumber" value="{$partnumber}" /></td>
+            <td>Package：</td>
+            <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
+            </tr>
+            <tr>
+            <td>Description：</td>
+            <td><input type="text" class="form-control" name="description" value="{$description}" /></td>
+            <td colspan="2" class="text-right"><input id="search_btn" type="button" value="搜索" class="btn btn-primary" /></td>
+            </tr>
+        </table>
+        </form>
+       <form action="__SELF__" method="post">
+        <table id="mainTable" class="table table-bordered">
+            <tr>
+                <th>CODE</th>
+                <th>Manufacturers.Mfr.Name</th>
+                <th>Manufacturers.Mfr.Part.Number</th>
+                <th>Package</th>
+                <th>Description</th>
+                <th>Project</th>
+                <th>Use.Qty</th>
+                <th>&nbsp;</th>
+            </tr> 
+        </table>
+        <div class="opt"><input type="submit" name="submit" value="添加使用记录" class="btn btn-primary" /></div>
+        </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

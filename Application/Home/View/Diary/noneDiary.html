@@ -1,0 +1,36 @@
+<include file="./Application/Member/View/Public/header.html"/>
+		<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">用户列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<if condition="$list">
+				<table class="table table-bordered">
+					<tr>
+                        <th>用户名</th>
+                        <th>姓名</th>
+                        <th>部门</th>
+						<!--<th>操作</th>-->
+					</tr>
+					<volist name="list" id="data">
+						<tr>
+                        	<td>{$data.username}</td>
+							<td><strong>{$data.nickname}</strong></td>
+                            <td>{$data.department}</td>
+							<!--<td></td>-->
+						</tr>
+					</volist>	
+					<tr class="nobg">
+						<td class="tdpage" colspan="3"><div class="pager">{$page}</div></td>
+					</tr>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+            </div>
+        </div>
+<include file="./Application/Member/View/Public/footer.html"/>
+

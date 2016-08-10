@@ -1,0 +1,149 @@
+<include file="./Application/Member/View/Public/header.html"/>
+		<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">搜索日志</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div id="srchuserdiv" class="tabcontentcur">
+				<form action="<if condition="$username neq ''">{:U('Home/Diary/index?username='.$username)}<else/>{:U('Home/Diary/index?view='.$view)}</if>" method="get">
+				<table class="table table-bordered">
+					<if condition="($view neq 'self') AND ($username eq '')">
+                    <tr>
+						<td width="80">真实姓名:</td>
+						<td><input type="text" name="srchname" value="{$srchname}" class="txt" style="margin-right:10px;" />
+                        <if condition="$view neq 'administration'">
+                        部门:
+						<select name="srchdepartmentid">
+                            	<option value="0">----</option>	
+                                <volist name="department_list" id="data">
+                                    <if condition="$data.id neq 4">
+                                    <option value="{$data.id}" <if condition="$data.id == $srchdepartmentid"> selected</if>>{$data.name}</option>
+                                    </if>
+                                </volist>
+                            </select>
+                        </if>
+                        </td>
+					</tr>
+                    </if>
+					<tr>
+						<td width="80">添加日期:</td>
+						<td><input type="text" name="srchregdatestart" value="{$srchregdatestart}" class="txt" style="margin-right:10px;" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />
+                        到
+                        <input type="text" name="srchregdateend" value="{$srchregdateend}" class="txt" style="margin-left:20px;" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd"/>  <input type="submit" value="提交" class="btn btn-primary" /></td>
+					</tr>
+				</table>
+				</form>
+			</div>
+            </div>
+        </div>
+		
+        <div class="box">
+            <div class="box-header">
+		<if condition="$username neq ''">
+        <h3 class="box-title">日志列表</h3>
+        <else/>
+        <h3 class="box-title">日志列表  <if condition="($view neq 'self') AND ($username eq '')"><a class="btn btn-info btn-flat btn-xs" href="{:U('Home/Diary/export?view='.$view)}">导出Excel表格</a></if></h3>
+        </if>
+        </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+			<if condition="$list">
+				<table class="table table-bordered">
+					<tr>
+                        <th width="60">用户名</th>
+                        <th width="50">部门</th>
+                        <th width="20%">上日工作内容总结</th>
+						<th width="30%">今日工作日志</th>
+						<th>特别成果</th>
+						<th>求助问题</th>
+						<th>点评</th>
+                        <th width="70">添加时间</th>
+                        <th width="120">操作</th>
+					</tr>
+					<volist name="list" id="value">
+                    	<volist name="value" id="data" key="k">
+						<tr>
+							<if condition="$k eq 1">
+							<td width="60" rowspan="{$data.rowspan}"><a style="text-decoration:none;" href="{:U('Home/Diary/index?view='.$view.'&srchname='.$data['nickname'])}">{$data.nickname}</a></td>
+                            <td width="50" rowspan="{$data.rowspan}">{$data.name}</td>
+                            <td width="20%" rowspan="{$data.rowspan}">
+                            	<table width="100%">
+                                	<volist name="data['summary']" id="summary" key="k1">
+                                    <tr><td style="position:relative; border-right:none; padding-top:20px;<if condition="$k1 eq count($data['summary'])"> border-bottom:none;</if>">
+                                    {:htmlspecialchars_decode($summary['content'])}
+                                    <div class="pull-right">
+                                        <if condition="$summary['percent'] gt 0"><span class="badge bg-green">{$summary.percent}</span></if>
+                                        <if condition="$summary['done_time'] neq ''"><span class="badge bg-yellow">{$summary.done_time}</span></if>
+                                    </div>
+                                    </td></tr>
+                                    </volist>
+                                </table>
+                            </td>
+                            </if>
+                            <td width="30%" style="position:relative; padding-top:20px;">{:htmlspecialchars_decode($data['content'])}
+                            <div class="pull-right">
+                            	<if condition="$data['percent'] gt 0"><span class="badge bg-green">{$data.percent}</span></if>
+                            	<if condition="$data['done_time'] neq ''"><span class="badge bg-yellow">{$data.done_time}</span></if>
+                            </div>
+                            </td>
+                            <if condition="$k eq 1">
+							<td rowspan="{$data.rowspan}">
+                            	<volist name="data['diaryitem']" id="diaryitem">
+                                {:htmlspecialchars_decode($diaryitem['achievement'])}
+                                </volist>
+                            </td>
+                            <td rowspan="{$data.rowspan}">
+                                <volist name="data['diaryitem']" id="diaryitem">
+                                {:htmlspecialchars_decode($diaryitem['diffculty'])}
+                                </volist>
+                            </td>
+                            </if>
+                            <td>
+                            	<volist name="data['comment']" id="comment">
+                                	<div style="margin-bottom:20px;">{:htmlspecialchars_decode($comment['content'])}</div>
+                                </volist>
+                            </td>
+                            <if condition="$k eq 1">
+							<td width="70" rowspan="{$data.rowspan}">{:date('Y-m-d', strtotime($data['datetime']))}</td>
+                            </if>
+							<td width="120">
+                            <if condition="$data['department_id'] eq 4">
+                                <if condition="($view eq 'self') OR (session('access')['option_administration_diary'] eq 1)">
+                                <a href="{:U('Home/Diary/edit?id='.$data['id'])}">编辑</a>
+                                </if>
+                                <if condition="session('access')['comment_administration_diary'] eq 1"> 
+                                 &nbsp;&nbsp; <a href="{:U('Home/Diary/comment?id='.$data['id'])}">点评</a>
+                                </if>
+                                <if condition="session('access')['option_administration_diary'] eq 1"> 
+                                 &nbsp;&nbsp; <a href="{:U('Home/Diary/delete?id='.$data['id'])}">删除</a>
+                                </if>
+                            <else/>
+                            	<if condition="($view eq 'self') OR (session('access')['option_development_diary'] eq 1)">
+                                <a href="{:U('Home/Diary/edit?id='.$data['id'])}">编辑</a>
+                                </if>
+                                <if condition="session('access')['comment_development_diary'] eq 1"> 
+                                 &nbsp;&nbsp; <a href="{:U('Home/Diary/comment?id='.$data['id'])}">点评</a>
+                                </if>
+                                <if condition="session('access')['option_development_diary'] eq 1"> 
+                                 &nbsp;&nbsp; <a href="{:U('Home/Diary/delete?id='.$data['id'])}">删除</a>
+                                </if>
+                            </if>
+                            </td>
+						</tr>
+                        </volist>
+					</volist>	
+					<tr class="nobg">
+						<td class="tdpage" colspan="9" style="border-right:none;"><div class="pager">{$page}</div></td>
+					</tr>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+		</div>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
+<include file="./Application/Member/View/Public/footer.html"/>

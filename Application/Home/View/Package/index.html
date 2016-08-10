@@ -1,0 +1,129 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script>
+function permissionCheck(id, type){
+	$('#'+type+'_check_a_'+id).find('img').show();
+	$.ajax({
+		url: '{:U('Home/Package/permissionCheck')}',
+		type: 'get',
+		data: 'id='+id+'&type='+type,
+		dataType: 'html',
+		success: function(status) {
+			$('#edit_a_'+id).hide();
+			$('#delete_a_'+id).hide();
+			$('#'+type+'_check_a_'+id).hide();
+			if(type == 'project'){
+				$('#'+type+'_status_'+id).html('项目负责人已审核');
+			}
+			if(type == 'it'){
+				$('#'+type+'_status_'+id).html('IT负责人已审核');
+			}
+			$('#'+type+'_status_'+id).css('color', '#1cb177');
+			if(status == '1'){
+				$('#upload_a_'+id).hide();
+				$('#'+type+'_check_a_'+id).after('&nbsp;&nbsp;<a class="btn btn-info">等待生成加密文件...</a>');
+			}else{
+				$('#'+type+'_check_a_'+id).after('&nbsp;&nbsp;操作成功！');
+			}
+		}
+	});
+}
+
+</script>
+<style>
+.btn img { display:none;}
+</style>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">数据包列表</h3> &nbsp;&nbsp; <a href="{:U('Home/Package/add')}" class="btn btn-info btn-flat btn-xs">上传</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+			<if condition="$list">
+				<table class="table table-bordered table-hover">
+					<tr>
+                        <th><strong>ID</strong></th>
+                        <th><strong>申请人</strong></th>
+                        <th><strong>项目Code</strong></th>
+                        <th><strong>相关描述</strong></th>
+                        <th><strong>Cksum</strong></th>
+                        <th><strong>上传路径</strong></th>
+                        <th><strong>发布时间</strong></th>
+                        <th><strong>状态</strong></th>
+                        <th><strong>操作</strong></th>
+					</tr>
+					<volist name="list" id="data">
+						<tr>
+							<td>{$data.id}</td>
+                            <td>{$data.username}</td>
+                            <td>{$data.project_code}</td>
+                            <td>{$data.description}</td>
+                            <td>{$data.checksum}</td>
+                            <td>{$data.file_path}</td>
+                            <td>{$data.datetime}</td>
+                            <td>
+                            <if condition="$data['status'] eq 3">
+                            	<span class="text-red">Cksum值不一致</span>
+                            <else/>
+                                <if condition="$data['it_header_is_check'] eq 1">
+                                <span id="it_status_{$data.id}" class="text-green">
+                                IT负责人已审核
+                                <else/>
+                                <span id="it_status_{$data.id}">
+                                IT负责人未审核
+                                </if>
+                                </span><br/>
+                                <if condition="$data['project_header_is_check'] eq 1">
+                                <span id="project_status_{$data.id}" class="text-green">
+                                项目负责人已审核
+                                <else/>
+                                <span id="project_status_{$data.id}">
+                                项目负责人未审核
+                                </if>
+                                </span><br/>
+                                <span id="status_{$data.id}">
+                                <if condition="$data['status'] neq 2">
+                                未发布
+                                </if>
+                                <if condition="$data['status'] eq 2">
+                                <font class="text-green">已发布</font>
+                                </if>
+                                </span>
+                            </if>
+                            </td>
+                            <td>
+                            <if condition="($data['it_header_is_check'] neq 1) AND ($data['project_header_is_check'] neq 1) AND ($data['check_email'] eq 1) OR ($data['status'] eq 3)"> 
+                            	<if condition="($data['userid'] eq session('uid')) OR (session('group_id') eq 1)">
+                            	&nbsp;&nbsp; <a id="edit_a_{$data.id}" href="{:U('Home/Package/edit?id='.$data['id'])}">编辑</a>
+                                &nbsp;&nbsp; <a id="delete_a_{$data.id}" href="{:U('Home/Package/delete?id='.$data['id'])}">删除</a>
+                                </if>
+                            </if>
+                            <if condition="($data['status'] lt 3) AND ($data['check_email'] eq 1) AND ($data['project_header'] eq session('email')) AND ($data['project_header_is_check'] neq 1)">
+                                &nbsp;&nbsp; <a id="project_check_a_{$data.id}" href="javascript:;" onClick="permissionCheck({$data.id},'project');" class="btn btn-info">审核通过<img src="__PUBLIC__/css/sloading.gif"></a>
+                            </if>
+                            <if condition="($data['status'] lt 3) AND ($data['check_email'] eq 1) AND ($data['it_header'] eq session('email')) AND ($data['it_header_is_check'] neq 1)">
+                                &nbsp;&nbsp; <a id="it_check_a_{$data.id}" href="javascript:;" onClick="permissionCheck({$data.id},'it');" class="btn btn-info">审核通过<img src="__PUBLIC__/css/sloading.gif"></a>
+                            </if>
+                            <if condition="($data['status'] eq 1) AND ($data['it_header_is_check'] eq 1) AND (($data['project_header'] eq session('email')) OR ($data['it_header'] eq session('email')))"> 
+                            	&nbsp;&nbsp; <a id="upload_a_{$data.id}" href="{:U('Home/Package/ftpUpload?id='.$data['id'])}" class="btn btn-info">上传至FTP服务器</a>
+                            </if>
+                            <if condition="($data['status'] eq 4) AND ($data['it_header_is_check'] eq 1)"> 
+                            	&nbsp;&nbsp; <a class="btn btn-success">正在加密中...</a>
+                            </if>
+                            <if condition="($data['status'] eq 5)"> 
+                            	&nbsp;&nbsp; <a class="btn btn-success">正在发布中...</a>
+                            </if>
+                            </td>
+						</tr>
+					</volist>	
+					<tr class="nobg">
+						<td class="tdpage" colspan="9"><div class="pager">{$page}</div></td>
+					</tr>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+		</div>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

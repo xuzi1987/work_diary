@@ -1,0 +1,81 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script>
+$(function(){
+	$('.deleteBtn').each(function(index, element) {
+        $(this).bind('click', function(){
+			if(confirm("确定删除吗？")){
+				if(parseInt($(this).parent().attr('rowspan')) > 1){
+					for(var i=parseInt($(this).parent().parent().index())+1; i<parseInt($(this).parent().attr('rowspan'))+parseInt($(this).parent().parent().index()); i++){
+						$('.table tr').eq(i).remove();
+					}
+				}
+				$(this).parent().parent().remove();
+			}
+		})
+    });
+})
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加采购汇总 &nbsp;&nbsp; <a href="{:U('Home/Material/finalBuyApplyIndex')}" class="btn btn-info btn-flat btn-xs">采购汇总列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+        <form action="__SELF__" method="post">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th width="60">Buy.Qty</th>
+                    <th>Description</th>
+                    <th width="100">需要到货时间</th>
+                    <th width="70">是否紧急</th>
+                    <th>Project</th>
+                    <th>供应商推荐</th>
+                    <th>CODE</th>
+                    <th width="45">库存</th>
+                    <th width="40">&nbsp;</th>
+                </tr>
+                <volist name="list" id="data">
+                	<tr>
+                    	<td colspan="12">申请人： <b>{$data.username}</b> &nbsp;&nbsp; {:date('Y-m-d', strtotime($data['datetime']))}</td>
+                    </tr>
+                    <volist name="data['applylist']" id="applylist">
+                    <tr>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td>{$applylist.quantity}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{:date('m-d', strtotime($applylist['receive_time']))}</td>
+                        <td>
+                        <if condition="$applylist['is_emergency'] eq 1">
+                        紧急
+                        <else />
+                        不紧急
+                        </if>
+                        </td>
+                        <td>{$applylist.project}</td>
+                        <td>
+                        <input type="hidden" name="apply_ids[]" class="form-control" value="{$data.id}">
+                        <input type="hidden" name="applylist_ids[]" class="form-control" value="{$applylist.id}">
+                        <input type="text" name="supplier[]" class="form-control">
+                        </td>
+                        <td>NULL</td>
+                        <td><span class="text-red"><b>0</b></span></td>
+                        <td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td>
+                    </tr>
+                    </volist>	
+                </volist>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+      </form>
+        <else />
+            <div class="note">
+                <p class="i">目前没有需要汇总的采购申请单!</p>
+            </div>
+        </if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

@@ -1,0 +1,76 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-body">
+   <form action="__SELF__" method="get">
+    <table class="table table-bordered" style="width:900px; margin-bottom:0;">
+    	<tr>
+        <td width="200">分类：</td>
+        <td>
+        <select name="cateid" class="form-control">
+        <option value="0">--</option>
+        <volist name="category" id="data">
+       <option value="{$data.id}" <if condition="$cateid eq $data['id']">selected="selected"</if>>{$data.name}</option>
+       </volist>
+        </select>
+        </td>
+        <td width="160">Manufacturers.Mfr.Name：</td>
+        <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
+        <td rowspan="3" width="60"><input type="submit" value="提交" class="btn btn-primary" /></td>
+        </tr>
+        <tr>
+        <td>Manufacturers.Mfr.Part.Number：</td>
+        <td><input type="text" class="form-control" name="partnumber" value="{$partnumber}" /></td>
+        <td>Package：</td>
+        <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
+        </tr>
+        <tr>
+        <td>Description：</td>
+        <td><input type="text" class="form-control" name="description" value="{$description}" /></td>
+        <td>Inventory：</td>
+        <td><input type="text" class="form-control" name="stock" value="{$stock}" /></td>
+        </tr>
+    </table>
+    </form>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">库存单</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+            <table class="table table-bordered">
+                <tr>
+                    <th>CODE</th>
+                    <th>分类</th>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th>Description</th>
+                    <th>Inventory</th>
+                    <th>Price</th>
+                </tr>
+                <volist name="list" id="applylist">
+                    <tr>
+                        <td>{$applylist.code}</td>
+                        <th>{$applylist.catename}</th>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{$applylist.stock}</td>
+                        <td>{$applylist.price}</td>
+                    </tr>
+                </volist> 
+                <tr class="nobg">
+                    <td class="tdpage" colspan="8"><div class="pager">{$page}</div></td>
+                </tr>
+            </table>
+        <else />
+            <div class="note">
+                <p class="i">目前没有入库单!</p>
+            </div>
+        </if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

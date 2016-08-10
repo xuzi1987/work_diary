@@ -1,0 +1,186 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<style>
+.ajax-list { position:absolute; z-index:100; border:#ddd solid 1px; display:none; padding:0; }
+.ajax-list li { width:238px; padding:2px 5px; list-style:none; background:#fff; }
+.ajax-list li a:hover { color:#F00;}
+</style>
+<script src="__PUBLIC__/ckeditor/ckeditor/ckeditor.js" type="text/javascript" ></script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">提名</h3> &nbsp;&nbsp; <a href="{:U('Home/Nominate/index')}" class="btn btn-info btn-flat btn-xs">提名浏览</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:620px;">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered">
+                	<tr>
+						<td><strong>奖项名称:</strong></td>
+						<td>
+							<select name="medal_id">
+                                <volist name="medal_list" id="data">
+                                    <option value="{$data.id}" <if condition="$data.id == $list['medal_id']"> selected</if>>{$data.name}</option>
+                                </volist>	
+                            </select>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>候选人姓名:</strong></td>
+						<td>
+							<input id="access_username" type="text" name="access_username" value="{$list.access_username}" class="form-control" autocomplete="off" />
+                            <input id="access_userid" type="hidden" name="access_userid" value="{$list.access_userid}">
+                            <div style="position:relative;">
+                                <ul id="userlist" class="ajax-list"></ul>
+                            </div>
+						</td>
+					</tr>
+                	<tr>
+						<td><strong>组别:</strong></td>
+						<td>
+							<select name="access_department_id">
+                                <option value="0">----</option>
+                                <volist name="department_list" id="data">
+                                    <option value="{$data.id}" <if condition="$data.id == $list['access_department_id']"> selected</if>>{$data.name}</option>
+                                </volist>	
+                            </select>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>岗位:</strong></td>
+						<td>
+							<input id="position" type="text" name="position" value="{$list.position}" class="form-control" autocomplete="off" />
+                            <div style="position:relative;">
+                                <ul id="positionlist" class="ajax-list"></ul>
+                            </div>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>提名理由:</strong></td>
+						<td>
+							<textarea name="description" id="content">{$list.description}</textarea>
+                            <script type="text/javascript">CKEDITOR.replace('content', {toolbar : [['TextColor'],['Source'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull']], width:500, height:300, skin:'v2'});</script>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>状态:</strong></td>
+						<td>
+							<select name="status">
+                               <option value="1"<if condition="$list.status == 1"> selected</if>>保存为草稿</option>
+                               <option value="2"<if condition="$list.status == 2"> selected</if>>发布</option>
+                            </select>
+						</td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+			</form>
+		</div>
+	</div>
+<script>
+function Trim(sText){ 
+	return sText.replace(new RegExp("(^[\\s]*)|([\\s]*$)", "g"), ""); 
+}
+$(document).ready(function(e) {
+	$('#access_username').keyup(function(){
+		if(Trim($('#access_username').val())){
+			$.ajax({
+				url: '{:U('Home/Nominate/userlist')}',
+				type: 'get',
+				data: 'srchname='+Trim($('#access_username').val()),
+				dataType: 'json',
+				success: function(json) {
+					$('#userlist').html('');
+					$.each(json, function(item,user){
+						var li = $('<li></li>',{
+							html: '<a id="'+user.userid+'" href="javascript:;">'+user.nickname+'</a>'
+						})
+						li.appendTo('#userlist').bind('click', function(){
+							$('#access_username').val($(this).children('a').html());
+							$('#access_userid').val($(this).children('a').attr('id'));
+							$('#userlist').hide();
+						});
+					})
+					$('#userlist').show();
+				}
+			});
+		}
+	})
+	
+	$('#access_username').click(function(){
+		if(Trim($('#access_username').val())){
+			$.ajax({
+				url: '{:U('Home/Nominate/userlist')}',
+				type: 'get',
+				data: 'srchname='+Trim($('#access_username').val()),
+				dataType: 'json',
+				success: function(json) {
+					$('#userlist').html('');
+					$.each(json, function(item,user){
+						var li = $('<li></li>',{
+							html: '<a id="'+user.userid+'" href="javascript:;">'+user.nickname+'</a>'
+						})
+						li.appendTo('#userlist').bind('click', function(){
+							$('#access_username').val($(this).children('a').html());
+							$('#access_userid').val($(this).children('a').attr('id'));
+							$('#userlist').hide();
+						});
+					})
+					$('#userlist').show();
+				}
+			});
+		}
+	})
+	
+	$('body ').bind('click',function(e){
+		if(e.target.id != 'access_username'){
+			$('#userlist').hide();
+		}
+		if(e.target.id != 'position'){
+			$('#positionlist').hide();
+		}
+	})
+	
+	$('#position').keyup(function(){
+		$.ajax({
+			url: '{:U('Home/Nominate/positionlist')}',
+			type: 'get',
+			data: 'srchname='+Trim($('#position').val()),
+			dataType: 'json',
+			success: function(json) {
+				$('#positionlist').html('');
+				$.each(json, function(item,data){
+					var li = $('<li></li>',{
+						html: '<a href="javascript:;">'+data+'</a>'
+					})
+					li.appendTo('#positionlist').bind('click', function(){
+						$('#position').val($(this).children('a').html());
+						$('#positionlist').hide();
+					});
+				})
+				$('#positionlist').show();
+			}
+		});
+	})
+	
+	$('#position').click(function(){
+		$.ajax({
+			url: '{:U('Home/Nominate/positionlist')}',
+			type: 'get',
+			data: 'srchname='+Trim($('#position').val()),
+			dataType: 'json',
+			success: function(json) {
+				$('#positionlist').html('');
+				$.each(json, function(item,data){
+					var li = $('<li></li>',{
+						html: '<a href="javascript:;">'+data+'</a>'
+					})
+					li.appendTo('#positionlist').bind('click', function(){
+						$('#position').val($(this).children('a').html());
+						$('#positionlist').hide();
+					});
+				})
+				$('#positionlist').show();
+			}
+		});
+	})
+});
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

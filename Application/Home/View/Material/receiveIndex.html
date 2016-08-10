@@ -1,0 +1,58 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css" type="text/css" media="all" />
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" type="text/javascript"></script>
+<script>
+$(function(){
+	$('.datetime').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+})
+</script>
+<div class="box">
+    <div class="box-header">
+      <form action="__SELF__" method="get">
+        <ul class="search-inline">
+            <li>入库日期: </li>
+            <li><input type="text" class="form-control datetime" name="srchregdatestart" value="{$srchregdatestart}"></li>
+            <li>-</li>
+            <li><input type="text" class="form-control datetime" name="srchregdateend" value="{$srchregdateend}"></li>
+            <li><input type="submit" value="提交" class="btn btn-primary" /></li>
+        </ul>
+      </form>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+            <table class="table table-bordered">
+                <tr>
+                    <th>CODE</th>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>入库时间</th>
+                </tr>
+                <volist name="list" id="applylist">
+                    <tr>
+                        <td>NULL</td>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td>{$applylist.quantity}</td>
+                        <td>{$applylist.price}</td>
+                        <td>{:date('Y-m-d', strtotime($applylist['updatetime']))}</td>
+                    </tr>
+                </volist> 
+                <tr class="nobg">
+                    <td class="tdpage" colspan="7"><div class="pager">{$page}</div></td>
+                </tr>
+            </table>
+        <else />
+            <div class="note">
+                <p class="i">目前没有入库信息!</p>
+            </div>
+        </if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

@@ -1,0 +1,62 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title"><if condition="$type eq 'fromMe'">我上传的文件<else/>我接收的文件</if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+			<if condition="$list">
+				<table class="table table-bordered table-hover">
+					<tr>
+                        <th><strong>文件名</strong></th>
+                        <th><strong>发送者</strong></th>
+                        <th><strong>状态</strong></th>
+                        <th><strong>说明</strong></th>
+                        <th><strong>发布时间</strong></th>
+                        <th><strong>接收状态</strong></th>
+                        <th><strong>操作</strong></th>
+					</tr>
+					<volist name="list" id="data">
+                        <tr>
+                            <td rowspan="{$data.rowspan}">{$data.file_path}</td>
+                            <td rowspan="{$data.rowspan}">{$data.username}</td>
+                            <td rowspan="{$data.rowspan}"><span class="label label-<if condition="$data['status'] eq 1">success<else/>danger</if>">{$data.status_text}</span></td>
+                            <td rowspan="{$data.rowspan}">{$data.description}</td>
+                            <td rowspan="{$data.rowspan}">{$data.datetime}</td>
+                            <td rowspan="{$data.rowspan}" style="line-height:28px;">
+                            <volist name="data['filereceiver']" id="filereceiver">
+                            <if condition="($type eq 'toMe' AND $filereceiver['userid'] eq session('uid')) OR ($type eq 'fromMe')">	
+                                <if condition="$filereceiver['status'] eq 2">
+                            	{$filereceiver.username} <span class="label label-success">已接收</span> <span class="label label-default">{$filereceiver.receive_datetime}</span>
+                                <else/>
+                                {$filereceiver.username} <span class="label label-warning">未接收</span>
+                                </if>
+                                <br/>
+                            </if>    
+                            </volist>
+                            </td>
+                            <td rowspan="{$data.rowspan}">
+                            	<if condition="$data['status'] eq 1">
+                                <if condition="session('uid') eq $data['userid']">
+                            	<a href="{:U('Home/File/delete?id='.$data['id'])}">删除文件</a> &nbsp;&nbsp; 
+                                <a href="{:U('Home/File/edit?id='.$data['id'])}">编辑权限</a>
+                                </if>
+                                <if condition="$type eq 'toMe' AND $data['status'] eq 1">
+                                <a href="{:U('Home/File/download?id='.$data['id'])}">下载文件</a>
+                                </if>
+                                </if> 
+                            </td>
+                        </tr>
+					</volist>	
+					<tr class="nobg">
+						<td class="tdpage" colspan="8"><div class="pager">{$page}</div></td>
+					</tr>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+		</div>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

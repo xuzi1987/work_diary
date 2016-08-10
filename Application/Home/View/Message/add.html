@@ -1,0 +1,121 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<style>
+.checkbox label{ line-height:22px; margin-right:15px;}
+</style>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加提醒</h3> &nbsp;&nbsp; <a href="{:U('Home/Message/index')}" class="btn btn-info btn-flat btn-xs">提醒列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered">
+                	<tr>
+						<td>
+                        <strong>CODE:</strong> {$list.code} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <strong>客户:</strong> {$list.customer}
+						</td>
+					</tr>
+                    <tr>
+                    <td>
+                    	<table id="iplist" class="table" width="100%">
+                        <tr>
+                        	<th>IP</th>
+                            <th>官方时间节点</th>
+                            <th>内部时间节点</th>
+                            <th>Comment</th>
+                            <th>负责人</th>
+                            <th>模拟</th>
+                            <th>数字</th>
+                            <th>版图</th>
+                            <th>初版数据</th>
+                            <th>中间数据</th>
+                            <th>终版数据</th>
+                        </tr>
+                        <volist name="list['iplist']" id="iplist">
+                        <tr>
+                        	<td>{$iplist.ip}</td>
+                            <td>{:date('Y-m-d', strtotime($iplist['official_datetime']))}</td>
+                            <td>{:date('Y-m-d', strtotime($iplist['interal_datetime']))}</td>
+                            <td>{$iplist.comment}</td>
+                            <td>{$iplist.header}</td>
+                            <td>{$iplist.moni_headers}</td>
+                            <td>{$iplist.shuzi_headers}</td>
+                            <td>{$iplist.bantu_headers}</td>
+                            <td>{:date('Y-m-d', strtotime($iplist['first_datetime']))}</td>
+                            <td>{:date('Y-m-d', strtotime($iplist['middle_datetime']))}</td>
+                            <td>{:date('Y-m-d', strtotime($iplist['final_datetime']))}</td>
+                        </tr>
+                        </volist>
+                        </table>
+                    </td>
+                    </tr>
+                    <tr>
+						<td id="msglist" colspan="2">
+                        	<table id="Msg_1" class="table" style="width:800px;">
+                            <tr><td colspan="2">
+                        	<a href="javascript:;" class="btn btn-danger btn-flat btn-xs" onClick="delMsg(1)">删除</a>
+                            </td></tr>
+                            <tr>
+                                <td width="60"><strong>人员:&nbsp;&nbsp;</strong></td>
+                                <td>
+                                <div class="checkbox" style="margin:0;"> 
+                                <volist name="list['users']" id="user">
+                                    <label>
+                                      <input type="checkbox" name="to_username[0][]" value="{$user}">{$user}
+                                    </label>
+                                </volist>
+                                </div> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>时间:&nbsp;&nbsp;</strong></td>
+                                <td>
+                                    <input type="text" name="alert_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" autocomplete="off" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>内容:&nbsp;&nbsp;</strong></td>
+                                <td>
+                                    <textarea style="height:100px;" name="msg[]" class="form-control"></textarea>
+                                </td>
+                            </tr>
+                            </table>
+                        </td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /> <input type="button" onClick="addMsg()" name="submit" value="添加提醒" class="btn btn-info" style="margin-left:10px;" /></div>
+			</form>
+    </div>
+</div>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
+<script>
+var i = 2;
+function addMsg(){
+	var html = '';
+	html += '<table id="Msg_'+i+'" class="table" style="width:800px;"><tr><td colspan="2">';
+	html += '<a href="javascript:;" class="btn btn-danger btn-flat btn-xs" onClick="delMsg('+i+')">删除</a>';
+	html += '</td></tr>';
+	html += '<tr><td><strong>人员:&nbsp;&nbsp;</strong></td><td><div class="checkbox" style="margin:0;">';
+	<volist name="list['users']" id="user">
+	html += '<label><input type="checkbox" name="to_username['+(i-1)+'][]" value="{$user}">{$user}</label>';
+	</volist>
+	html += '</div></td></tr>';
+	html += '<tr><td><strong>时间:&nbsp;&nbsp;</strong></td>';
+	html += '<td><input type="text" name="alert_datetime[]" value="" class="datetime" autocomplete="off" /></td></tr>';
+	html += '<tr><td><strong>内容:&nbsp;&nbsp;</strong></td>';
+	html += '<td><textarea style="height:100px;" name="msg[]" class="form-control"></textarea></td></tr></table>';
+	$('#msglist').append(html);
+	$('.datetime').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+	i++;
+}
+
+function delMsg(id){
+	$('#Msg_'+id).remove();
+}
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

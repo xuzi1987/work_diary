@@ -1,0 +1,42 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加奖项</h3> &nbsp;&nbsp; <a href="{:U('Home/Medal/index')}" class="btn btn-info btn-flat btn-xs">奖项列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:600px;">
+		<table class="table table-bordered">
+            <tr>
+                <td><strong>名称:</strong></td>
+                <td>
+                    <input type="text" name="name" value="" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>名额:</strong></td>
+                <td>
+                    <input type="text" name="places" value="" class="form-control" style="width:50px;" />
+                </td>
+            </tr>
+            <!--<tr>
+                <td><strong>允许提名限额:</strong></td>
+                <td>
+                    <input type="text" name="nominate_places" value="" class="form-control" style="width:50px;" />名
+                </td>
+            </tr>-->
+            <tr>
+                <td><strong>状态:</strong></td>
+                <td>
+                    <select name="status">
+                        <option value="1" selected>正常</option>
+                        <option value="2">停用</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>
+
+

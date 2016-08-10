@@ -1,0 +1,25 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">查看团队成员 <if condition="$type eq 1 OR session('group_id') eq 1"><a href="{:U('Team/edit?id='.$team['id'])}" class="btn btn-primary btn-flat btn-xs">{$team.name}</a> <a href="{:U('Team/addmember?id='.$team['id'])}" class="btn btn-info btn-flat btn-xs">添加成员</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table class="table table-bordered">
+            <tr>
+                <th>ID</th>
+                <th>真实姓名</th>
+                <th>角色</th>
+                <th>操作</th>
+            </tr>
+            <volist name="list" id="data">
+                <tr>
+                    <td class="option">{$data.userid}</td>
+                    <td><if condition="$type eq 1 OR session('group_id') eq 1"><a style="text-decoration:none;" href="{:U('Home/Diary/index?view='.$view.'&username='.$data['username'])}"><strong>{$data.nickname}</strong></a><else/><strong>{$data.nickname}</strong></if></td>
+                    <td>{$data.type}</td>
+                    <td><if condition="$type eq 1 OR session('group_id') eq 1"><a href="{:U('Team/editmember','teamid='.$data['teamid'].'&userid='.$data['userid'])}">编辑</a> | <a href="{:U('Team/deletemember','teamid='.$data['teamid'].'&userid='.$data['userid'])}">删除</a></if> </td>
+                </tr>
+            </volist>
+        </table>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

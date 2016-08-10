@@ -1,0 +1,43 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<link rel="stylesheet" href="__PUBLIC__/plugins/select2/select2.min.css" type="text/css" media="all" />
+<script src="__PUBLIC__/plugins/select2/select2.full.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/dist/css/AdminLTE.min.css" type="text/css" media="all" />
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加团队成员： <a href="{:U('Team/edit?id='.$team['id'])}" class="btn btn-primary btn-flat btn-xs">{$team.name}</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <form action="__SELF__" method="post" class="form-horizontal">
+    <div class="box-body" style="width:600px;">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="username">选择用户:</label>
+          <div class="col-sm-10">
+            <select id="username" name="username" class="form-control select2">
+            <option selected="selected">输入员工姓名</option>
+            <volist name="list" id="data">
+              <option>{$data.nickname}</option>
+            </volist>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="type">角色:</label>
+          <div class="col-sm-10">
+            <select name="type" id="type" class="form-control">
+                <option value="2">成员</option>
+                <option value="1">组长</option>
+            </select>
+            <input type="hidden" name="teamid" value="{$team.id}" />
+          </div>
+        </div>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+    </div>
+    </form>
+</div>
+<script>
+$(function(){
+	$("#username").select2();
+})
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>
+

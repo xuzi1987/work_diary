@@ -1,0 +1,25 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑团队 <a href="{:U('Team/index')}" class="btn btn-info btn-flat btn-xs">团队列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <form action="__SELF__" method="post" class="form-horizontal">
+    <div class="box-body" style="width:600px;">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="name">团队名称:</label>
+          <div class="col-sm-10">
+            <input type="text" name="name" id="name" value="{$list.name}" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="description">说明:</label>
+          <div class="col-sm-10">
+            <input type="text" name="description" id="description" value="{$list.description}" class="form-control" />
+          </div>
+        </div>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+    </div>
+    </form>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

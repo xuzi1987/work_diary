@@ -1,0 +1,116 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script src="__PUBLIC__/ckeditor/ckeditor/ckeditor.js" type="text/javascript" ></script>
+<script>
+function removeTr(i, type){
+	$('#'+type+'nrtr'+i).remove();
+}
+
+var total = {$summary_count};
+function addItem(type){
+	total = total + 1;
+	var html = '';
+	html += '<tr id="'+type+'nrtr'+total+'"><td>';
+    html += '<textarea name="'+type+'content[]" id="'+type+'description'+total+'"></textarea>';
+    html += '</td>';
+    html += '<td>';
+    html += '<input type="text" placeholder="%" style="width:50px;" name="'+type+'percent[]">%';
+    html += '</td>';
+    html += '<td>';
+    html += '<input type="text" name="'+type+'complete_time[]">';
+    html += '</td>';
+    html += '<td>';
+    html += '<a href="javascript:;" onClick="removeTr('+total+', \''+type+'\')" class="btn btn-danger btn-xs">移除</a>';
+    html += '</td></tr>';
+	$('#'+type+'container').append(html);
+	CKEDITOR.replace(type+'description'+total, {toolbar : [['TextColor']], width:500, height:80, skin:'v2'});
+}
+
+function getEditorContent(){
+	$('textarea').each(function(index, element) {
+        var id = $(this).attr('id');
+		$(this).text(CKEDITOR.instances[id].getData());
+    });
+	return true;
+}
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑日志</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <form action="__SELF__" method="post">
+      <table class="table table-bordered">
+        <tr>
+          <td width="200"><b>上日工作内容总结:</b><br/><i>（每栏填写一条工作记录）</i></td>
+          <td><table id="summary_container">
+              <tr>
+                <td width="500">工作内容</td>
+                <td>完成百分比</td>
+                <td>预计完成时间</td>
+                <td>操作</td>
+              </tr>
+              <volist name="diary['summary']" id="summary" key="k1">
+              <tr id="summary_nrtr{$k1}">
+                <td><textarea name="summary_content[]" id="summary_description{$k1}">{:htmlspecialchars_decode($summary['content'])}</textarea>
+                  <script type="text/javascript">CKEDITOR.replace('summary_description{$k1}', {toolbar : [['TextColor']], width:500, height:80, skin:'v2'});</script></td>
+                <td><input type="text" placeholder="%" style="width:50px;" name="summary_percent[]" value="{$summary.percent}">
+                  % </td>
+                <td><input type="text" name="summary_complete_time[]" value="{$summary.done_time}"></td>
+                <td><if condition="$k1 gt 1"><a href="javascript:;" onClick="removeTr({$k1}, 'summary_')" class="btn btn-danger btn-xs">移除</a></if></td>
+              </tr>
+              </volist>
+            </table>
+            <div style="padding-left:4px;"> <a href="javascript:;" onClick="addItem('summary_');" class="btn btn-info btn-xs">添加一条</a> </div></td>
+        </tr>
+        <tr>
+          <td width="200"><b>今日工作内容:</b></td>
+        <td>
+       		 <table id="container">
+                <tr>
+                  <td width="500">工作内容</td>
+                  <td>完成百分比</td>
+                  <td>预计完成时间</td>
+                  <td>操作</td>
+                </tr>
+                <tr id="nrtr1">
+                  <td><textarea name="content[]" id="description1">{:htmlspecialchars_decode($diary['content'])}</textarea>
+                    <script type="text/javascript">CKEDITOR.replace('description1', {toolbar : [['TextColor']], width:500, height:80, skin:'v2'});</script></td>
+                  <td><input type="text" placeholder="%" style="width:50px;" name="percent[]" value="{$diary.percent}">
+                    % </td>
+                  <td><input type="text" name="complete_time[]" value="{$diary.done_time}"></td>
+                  <td></td>
+                </tr>
+              </table>
+        </td>
+        </tr>
+        <tr>
+          <td width="200"><b>特别成果:</b></td>
+        <td>
+       		 <textarea name="achievement" id="achievement">
+             <volist name="diary['diaryitem']" id="diaryitem">
+            	{:htmlspecialchars_decode($diaryitem['achievement'])}
+             </volist>
+            </textarea>
+             <script type="text/javascript">CKEDITOR.replace('achievement', {toolbar : [['TextColor']], width:500, height:100, skin:'v2'});</script>
+        </td>
+        </tr>
+        <tr>
+          <td width="200"><b>求助问题:</b></td>
+        <td>
+       		 <textarea name="diffculty" id="diffculty">
+             <volist name="diary['diaryitem']" id="diaryitem">
+            {:htmlspecialchars_decode($diaryitem['diffculty'])}
+            </volist>
+             </textarea>
+             <script type="text/javascript">CKEDITOR.replace('diffculty', {toolbar : [['TextColor']], width:500, height:100, skin:'v2'});</script>
+        </td>
+        </tr>
+      </table>
+      <div class="opt">
+        <input type="submit" name="submit" value="提交" class="btn btn-primary" onClick="getEditorContent();"/>
+      </div>
+    </form>
+  </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

@@ -1,0 +1,196 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script src="__PUBLIC__/plugins/select2/select2.full.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/dist/css/AdminLTE.min.css" type="text/css" media="all" />
+<script>
+var i = 2;
+function addIP(){
+	var html = '';
+	html += '<table id="ip_'+i+'" class="table table-bordered"><tr><td colspan="2">';
+	html += '<a href="javascript:;" class="btn btn-danger btn-flat btn-xs" onClick="delIP('+i+')">删除</a>';
+	html += '</td></tr>';
+	html += '<tr><td width="125"><strong>IP:</strong></td>';
+	html += '<td><input type="text" name="ip[]" value="" class="form-control" /></td></tr>';
+	html += '<tr><td colspan="2"><strong>官方时间节点:</strong>&nbsp;&nbsp; <input type="text" name="official_datetime[]" value="" class="datetime" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;&nbsp;&nbsp;';
+	html += '<strong>内部时间节点:</strong>&nbsp;&nbsp; <input type="text" name="interal_datetime[]" value="" class="datetime" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" /></td></tr>';
+	html += '<tr><td><strong>内部时间节点:</strong></td>';
+	html += '<td><input type="text" name="interal_datetime[]" value="" class="form-control" /></td></tr>';
+	html += '<tr><td><strong>Comment:</strong></td>';
+	html += '<td><textarea style="height:60px;" name="comment[]" class="form-control"></textarea></td></tr>';
+	html += '<tr><td><strong>负责人:</strong></td>';
+	html += '<td><input type="text" name="header[]" value="" class="form-control" /></td></tr>';
+	html += '<tr><td><strong>项目人员:</strong></td>';
+	html += '<td>';
+	
+	html += '<div class="input-group" style="margin-bottom:5px; width:618px;"><span class="input-group-addon">模拟</span>';
+	html += '<select name="moni_headers'+i+'[]" class="form-control select2" multiple="multiple">';
+	<volist name="moni_users" id="data">
+	html += '<option>{$data.nickname}</option>';
+	</volist>
+	html += '</select>';
+    html += '</div>';
+	
+	html += '<div class="input-group" style="margin-bottom:5px; width:618px;"><span class="input-group-addon">数字</span>';
+	html += '<select name="shuzi_headers'+i+'[]" class="form-control select2" multiple="multiple">';
+	<volist name="shuzi_users" id="data">
+	html += '<option>{$data.nickname}</option>';
+	</volist>
+	html += '</select>';
+    html += '</div>';
+	
+    html += '<div class="input-group" style="width:618px;"><span class="input-group-addon">版图</span>';
+	html += '<select name="bantu_headers'+i+'[]" class="form-control select2" multiple="multiple">';
+	<volist name="bantu_users" id="data">
+	html += '<option>{$data.nickname}</option>';
+	</volist>
+	html += '</select>';
+    html += '</div>';
+
+	html += '</td></tr>';
+	html += '<tr>';
+	html += '<td colspan="2">';
+	html += '<strong>初版数据:</strong>&nbsp;&nbsp; <input type="text" name="first_datetime[]" value="" class="datetime" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;';
+	html += '<strong>中间数据:</strong>&nbsp;&nbsp; <input type="text" name="middle_datetime[]" value="" class="datetime" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;';
+	html += '<strong>终版数据:</strong>&nbsp;&nbsp; <input type="text" name="final_datetime[]" value="" class="datetime" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />';
+	html += '</td>';
+	html += '</tr>';
+	html += '</table>';
+	$('#iplist').append(html);
+	$('#ip_'+i+' .datetime').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+	$('#ip_'+i+' .select2').select2();
+	i++;
+}
+
+function delIP(id){
+	$('#ip_'+id).remove();
+}
+</script>
+<div class="box">
+<div class="box-header">
+      <h3 class="box-title">添加项目 <a href="{:U('Home/Project/index')}" class="btn btn-info btn-flat btn-xs">项目列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:800px;">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered">
+                	<tr>
+						<td width="130"><strong>公钥文件名:</strong></td>
+						<td>
+							<input type="text" name="keys" value="" class="form-control" />
+						</td>
+					</tr>
+                	<tr>
+						<td><strong>CODE:</strong></td>
+						<td>
+							<input type="text" name="code" value="" class="form-control" />
+						</td>
+					</tr>
+					<tr>
+						<td><strong>客户:</strong></td>
+						<td>
+							<input type="text" name="customer" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>工艺/金属层次:&nbsp;&nbsp;</strong></td>
+						<td>
+							<input type="text" name="technology" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>MPW/FM:</strong></td>
+						<td>
+							<input type="text" name="mpw_fm" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>负责人:</strong></td>
+						<td>
+							<input type="text" name="project_header_text" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<td id="iplist" colspan="2">
+                        	<table id="ip_1" class="table table-bordered">
+                            <tr><td colspan="2">
+                        	<a href="javascript:;" class="btn btn-danger btn-flat btn-xs" onClick="delIP(1)">删除</a>
+                            </td></tr>
+                            <tr>
+                                <td width="125"><strong>IP:</strong></td>
+                                <td>
+                                    <input type="text" name="ip[]" value="" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong>官方时间节点:</strong>&nbsp;&nbsp; <input type="text" name="official_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <strong>内部时间节点:</strong>&nbsp;&nbsp; <input type="text" name="interal_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Comment:</strong></td>
+                                <td>
+                                    <textarea style="height:60px;" name="comment[]" class="form-control"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>负责人:</strong></td>
+                                <td>
+                                    <input type="text" name="header[]" value="" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>项目人员:</strong></td>
+                                <td>
+                                     <div class="input-group" style="margin-bottom:5px; width:618px;">
+                                        <span class="input-group-addon">模拟</span>
+                                        <select name="moni_headers[]" class="form-control select2" multiple="multiple">
+                                        <volist name="moni_users" id="data">
+                                          <option>{$data.nickname}</option>
+                                        </volist>
+                                        </select>
+                                      </div>
+                                      <div class="input-group" style="margin-bottom:5px; width:618px;">
+                                        <span class="input-group-addon">数字</span>
+                                        <select name="shuzi_headers[]" class="form-control select2" multiple="multiple">
+                                        <volist name="shuzi_users" id="data">
+                                          <option>{$data.nickname}</option>
+                                        </volist>
+                                        </select>
+                                      </div>
+                                      <div class="input-group" style="width:618px;">
+                                        <span class="input-group-addon">版图</span>
+                                        <select name="bantu_headers[]" class="form-control select2" multiple="multiple">
+                                        <volist name="bantu_users" id="data">
+                                          <option>{$data.nickname}</option>
+                                        </volist>
+                                        </select>
+                                      </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong>初版数据:</strong>&nbsp;&nbsp; <input type="text" name="first_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;
+                                    <strong>中间数据:</strong>&nbsp;&nbsp; <input type="text" name="middle_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />&nbsp;&nbsp;
+                                    <strong>终版数据:</strong>&nbsp;&nbsp; <input type="text" name="final_datetime[]" value="" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" />
+                                </td>
+                            </tr>
+                            </table>
+                            
+                        </td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /> <input type="button" onClick="addIP()" name="submit" value="添加IP" class="btn btn-info" style="margin-left:10px;" /></div>
+			</form>
+		</div>
+	</div>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
+<script>
+$(function(){
+	$(".select2").select2();
+})
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

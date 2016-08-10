@@ -1,0 +1,92 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加采购确认  &nbsp;&nbsp; <a href="{:U('Home/Material/buyConfirmIndex')}" class="btn btn-info btn-flat btn-xs">采购确认列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+        <form action="__SELF__" method="post">
+        <volist name="list" id="rs">
+            <table class="table table-bordered">
+            	<tr>
+                    <td colspan="17">汇总人： <b>{$rs.username}</b> &nbsp;&nbsp; {:date('Y-m-d', strtotime($rs['datetime']))}</td>
+                </tr>
+                <tr>
+                	<th width="60">申请人</th>
+                    <th>CODE</th>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th width="60">Buy.Qty</th>
+                    <th>Description</th>
+                    <th width="100">需要到货时间</th>
+                    <th width="70">是否紧急</th>
+                    <th>Project</th>
+                    <th>供应商推荐</th>
+                    <th>预计货运周期</th>
+                    <th>单价</th>
+                    <th>优惠</th>
+                    <th>发票税</th>
+                    <th>快递费</th>
+                    <th>预付款</th>
+                </tr>
+                <volist name="rs['applylist']" id="data">
+                    <volist name="data['applylist']" id="applylist" key="k">
+                    <tr>
+                    	<if condition="$k eq 1">
+                    	<td rowspan="{:count($data['applylist'])}">{$data.username}</td>
+                        </if>
+                        <td>NULL</td>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td class="quanity">{$applylist.quantity}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{:date('Y-m-d', strtotime($applylist['receive_time']))}</td>
+                        <td>
+                        <if condition="$applylist['is_emergency'] eq 1">
+                        紧急
+                        <else />
+                        不紧急
+                        </if>
+                        </td>
+                        <td>{$applylist.project}</td>
+                        <td>{$applylist.supplier}</td>
+                        <td><input type="text" name="shipping_time[]" class="form-control"></td>
+                        <td><input type="text" name="price[]" class="form-control price"></td>
+                        <td><input type="text" name="discount[]" class="form-control discount"></td>
+                        <td><input type="text" name="tax[]" class="form-control tax"></td>
+                        <td><input type="text" name="express[]" class="form-control express"></td>
+                        <td>
+                        <input type="hidden" name="final_apply_ids[]" class="form-control" value="{$rs.id}">
+                        <input type="hidden" name="apply_ids[]" class="form-control" value="{$applylist.apply_id}">
+                        <input type="hidden" name="applylist_ids[]" class="form-control" value="{$applylist.id}">
+                        <input type="text" name="advance_payment[]" class="form-control advance_payment" readonly="readonly">
+                        </td>
+                    </tr>
+                    </volist>	
+                </volist>
+                </table>
+               </volist> 
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+        <else />
+            <div class="note">
+                <p class="i">目前没有需要确认的采购单!</p>
+            </div>
+        </if>
+	</div>
+<script>
+$('.price, .discount, .tax, .express').each(function(index, element) {
+    $(this).bind('blur', function(){
+		var price = Number($(this).parent().parent().find('.price').val())
+		var discount = Number($(this).parent().parent().find('.discount').val())
+		var tax = Number($(this).parent().parent().find('.tax').val())
+		var express = Number($(this).parent().parent().find('.express').val())
+		var quanity = parseInt($(this).parent().parent().find('.quanity').html());
+		$(this).parent().parent().find('.advance_payment').val((price*quanity+tax+express-discount).toFixed(4));
+	})
+});
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

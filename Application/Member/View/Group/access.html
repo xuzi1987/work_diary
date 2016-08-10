@@ -1,0 +1,67 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑用户组权限 &nbsp;&nbsp; <a href="__SELF__" class="btn btn-info btn-flat btn-xs">{$list.title}</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form action="__SELF__" method="post">
+            <table class="table table-bordered table-hover" style="width:500px">
+                <tr>
+                    <td><input type="checkbox" name="view_development_diary" value="1" <if condition="$list['access']['view_development_diary'] eq 1">checked</if>></td>
+                    <td>允许浏览研发日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="view_administration_diary" value="1" <if condition="$list['access']['view_administration_diary'] eq 1">checked</if>></td>
+                    <td>允许浏览行政日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="comment_development_diary" value="1" <if condition="$list['access']['comment_development_diary'] eq 1">checked</if>></td>
+                    <td>允许点评研发日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="comment_administration_diary" value="1" <if condition="$list['access']['comment_administration_diary'] eq 1">checked</if>></td>
+                    <td>允许点评行政日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_development_diary" value="1" <if condition="$list['access']['option_development_diary'] eq 1">checked</if>></td>
+                    <td>允许修改/删除研发日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_administration_diary" value="1" <if condition="$list['access']['option_administration_diary'] eq 1">checked</if>></td>
+                    <td>允许修改/删除行政日志</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="create_team" value="1" <if condition="$list['access']['create_team'] eq 1">checked</if>></td>
+                    <td>允许创建团队</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_article" value="1" <if condition="$list['access']['option_article'] eq 1">checked</if>></td>
+                    <td>允许添加/删除/修改公告</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_finalbuyapply" value="1" <if condition="$list['access']['option_finalbuyapply'] eq 1">checked</if>></td>
+                    <td>允许操作采购汇总</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_buyconfirm" value="1" <if condition="$list['access']['option_buyconfirm'] eq 1">checked</if>></td>
+                    <td>允许操作采购确认</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_buycheckout" value="1" <if condition="$list['access']['option_buycheckout'] eq 1">checked</if>></td>
+                    <td>允许操作采购审核</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_receive" value="1" <if condition="$list['access']['option_receive'] eq 1">checked</if>></td>
+                    <td>允许操作采购收货</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="option_materialuses" value="1" <if condition="$list['access']['option_materialuses'] eq 1">checked</if>></td>
+                    <td>允许操作元器件出库</td>
+                </tr>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>
+

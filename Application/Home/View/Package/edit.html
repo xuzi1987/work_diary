@@ -1,0 +1,81 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<script>
+function setProjectHeader(){
+	var project_code = $('#project_code').children('option:selected').val();
+	if(project_code){
+		$.ajax({
+			url: '{:U('Home/Package/getCode')}',
+			type: 'get',
+			data: 'project_code='+project_code,
+			dataType: 'json',
+			async:true,
+			success: function(data) {
+				if(!data.project_header_text){
+					$('#project_header_text').html('');
+					$('#project_header').val('');
+					alert('请选择正确的项目Code');
+					return;
+				}
+				$('#project_header_text').html(data.project_header_text);
+				$('#project_header').val(data.project_header);
+			}
+		});
+	}
+}
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">编辑</h3> &nbsp;&nbsp; <a href="{:U('Home/Package/index')}" class="btn btn-info btn-flat btn-xs">列表</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:800px;">
+			<form id="form1" action="__SELF__" enctype="multipart/form-data" method="post">
+				<table class="table table-bordered">
+                	<tr>
+						<td><strong>项目Code:</strong></td>
+						<td>
+                        	<select name="project_code" id="project_code" onChange="setProjectHeader()">
+                                <option value="">请选择项目Code</option>
+                                <volist name="projects" id="project">
+                                <option <if condition="$list['project_code'] eq $project['code']"> selected="selected"</if> value="{$project.code}">{$project.code}</option>
+                                </volist>
+                            </select>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>相关描述:</strong></td>
+						<td>
+                        	<textarea name="description" style="height:100px;" class="form-control">{$list.description}</textarea>(描述项目信息，数据包内容)
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>项目负责人:</strong></td>
+						<td>
+							<span id="project_header_text">{$list.project_header_text}</span>
+                            <input type="hidden" id="project_header" name="project_header" value="{$list.project_header}"/>
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>IT负责人:</strong></td>
+						<td>
+                            戴俊
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>数据包路径:</strong></td>
+						<td>
+							{$list.file_path}
+						</td>
+					</tr>
+                    <tr>
+						<td><strong>Cksum:</strong></td>
+						<td>
+							<input type="text" name="checksum" value="{$list.checksum}" class="txt" class="form-control"/>
+						</td>
+					</tr>
+				</table>
+				<div class="opt"><input id="btnSubmit" type="submit" value="提交" class="btn btn-primary" /></div>
+			</form>
+		</div>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

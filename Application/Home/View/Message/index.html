@@ -1,0 +1,47 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">提醒列表</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th><strong>CODE</strong></th>
+                    <th><strong>发送人</strong></th>
+                    <th><strong>接收人</strong></th>
+                    <th><strong>消息内容</strong></th>
+                    <th><strong>发送时间</strong></th>
+                    <th><strong>添加时间</strong></th>
+                    <th><strong>操作</strong></th>
+                </tr>
+                <volist name="list" id="data">
+                    <tr>
+                        <td>{$data.code}</td>
+                        <td>{$data.from_username}</td>
+                        <td>{$data.to_username}</td>
+                        <td>{:nl2br($data['msg'])}</td>
+                        <td>{:date('Y-m-d', strtotime($data['alert_datetime']))}</td>
+                        <td>{$data.datetime}</td>
+                        <td>
+                        <if condition="session('group_id') eq 1 OR session('group_id') eq 4"> 
+                            &nbsp;&nbsp; <a href="{:U('Home/Message/edit?id='.$data['id'])}">编辑</a>
+                            &nbsp;&nbsp; <a href="{:U('Home/Message/delete?id='.$data['id'])}">删除</a>
+                            &nbsp;&nbsp; <a href="{:U('Home/Message/sendMessage?id='.$data['id'])}">发送提醒</a>
+                        </if>
+                        </td>
+                    </tr>
+                </volist>
+                <tr class="nobg">
+                    <td class="tdpage" colspan="7"><div class="pager">{$page}</div></td>
+                </tr>
+            </table>
+        <else />
+            <div class="note">
+                <p class="i">目前没有相关记录!</p>
+            </div>
+        </if>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

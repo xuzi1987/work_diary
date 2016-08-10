@@ -1,0 +1,119 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<style>
+.out{ position:relative;width:0px;height:0px;border-left:100px #f0f0f0 solid;border-top:40px #ddd solid;}
+.out b{display:block;position:absolute;top:-40px;left:-55px;width:55px; color:#333; font-weight:100;font-style:normal; }
+.out em{display:block;position:absolute;top:-25px;left:-90px;width:55x; color:#333; font-size:12px;font-style:normal;}
+</style>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">搜索提名</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="srchuserdiv" class="tabcontentcur" style="width:800px;">
+				<form action="__SELF__" method="get">
+				<table width="100%" class="table table-bordered">
+					<tr>
+                    <td>组别:</td>
+					<td>
+                    <select name="srchdepartmentid">
+                        <option value="0">----</option>	
+                        <volist name="department_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchdepartmentid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>
+                    <!--<td>项目组:</td>
+					<td>
+                    <select name="srchprojectid">
+                        <option value="0">----</option>	
+                        <volist name="project_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchprojectid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>-->
+                    <td>奖项:</td>
+					<td>
+                    <select name="srchmedalid">
+                        <option value="0">----</option>	
+                        <volist name="medal_list" id="data">
+                            <option value="{$data.id}" <if condition="$data.id == $srchmedalid"> selected</if>>{$data.name}</option>
+                        </volist>
+                    </select>
+                    </td>
+                    <td>提名时间:</td>
+					<td>
+                    年份 <select name="srchyear">
+                    <option value="0">----</option>
+                    <?php 
+                    for($i = intval(date('Y',time()))-10; $i <= intval(date('Y',time())); $i++){
+                    	if($srchyear == $i){
+                        	echo '<option value="'.$i.'" selected>'.$i.'</option>';
+                        }else{
+                        	echo '<option value="'.$i.'">'.$i.'</option>';
+                        }
+                   	}
+                    ?>
+                    </select>  
+                    &nbsp;&nbsp; 季度
+                    <select name="srchquarter">
+                    <option value="0">----</option>
+                    <option value="1" <if condition="$srchquarter == '1'"> selected</if>>第一季度</option>
+                    <option value="2" <if condition="$srchquarter == '2'"> selected</if>>第二季度</option>
+                    <option value="3" <if condition="$srchquarter == '3'"> selected</if>>第三季度</option>
+                    <option value="4" <if condition="$srchquarter == '4'"> selected</if>>第四季度</option>
+                    </select>  
+                    </td>
+                    <td><input type="submit" value="提交" class="btn btn-primary" /></td>
+                    </tr>
+				</table>
+				</form>
+			</div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">提名列表</h3> &nbsp;&nbsp; <a href="{:U('Home/Nominate/index')}" class="btn btn-success btn-flat btn-xs">按奖项浏览</a> &nbsp;&nbsp; <a href="{:U('Home/Nominate/export?type=index&srchdepartmentid='.$srchdepartmentid.'&srchprojectid='.$srchprojectid.'&srchmedalid='.$srchmedalid.'&srchyear='.$srchyear.'&srchquarter='.$srchquarter)}" class="btn btn-info btn-flat btn-xs">导出Excel（按奖项浏览）</a> &nbsp;&nbsp; <a href="{:U('Home/Nominate/export?type=rank&srchdepartmentid='.$srchdepartmentid.'&srchprojectid='.$srchprojectid.'&srchmedalid='.$srchmedalid.'&srchyear='.$srchyear.'&srchquarter='.$srchquarter)}" class="btn btn-info btn-flat btn-xs">导出Excel（按提名次数浏览）</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    				<if condition="$list">
+				<table class="table table-bordered">
+					<tr>
+                        <th width="100" style="padding:0;">
+                        <div class="out"> <b>提名次数</b> <em>候选人</em> </div>
+                        </th>
+                        <volist name="medal_list" id="data">
+                        <th class="medal"><strong>{$data.name}</strong></th>
+                        </volist>
+                        <th class="medal"><strong>提名次数总计</strong></th>
+					</tr>
+					<volist name="list" id="data">
+					<tr>	
+                        <td>{$data[access_username]}</td>
+                        <?php $total = 0; ?>
+                        <volist name="medal_list" id="medal">
+                           <td>
+                           <?php 
+                           $sub_total = count($data[$medal[id]]); 
+                           $total += $sub_total;
+                           ?>
+                           <if condition="$sub_total gt 0">
+                           <strong>{$sub_total}</strong>
+                           </if>
+                           </td>
+                        </volist>
+                        <td>
+                        	<strong>{$total}</strong>
+                        </td>
+                    </tr>
+					</volist>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>

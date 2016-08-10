@@ -1,0 +1,30 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">添加部门 <a href="{:U('Department/index')}" class="btn btn-info btn-flat btn-xs">部门列表</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="width:600px;">
+        <table class="table table-bordered">
+            <tr>
+                <th>部门名称:</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="name" value="" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th>排序:</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="sort" value="{$list.sort}" class="form-control" />
+                </td>
+            </tr>
+        </table>
+        <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+    </div>
+</div>
+<include file="./Application/Member/View/Public/footer.html"/>
+

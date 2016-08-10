@@ -1,0 +1,93 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">项目列表  <if condition="session('access')['create_team'] eq 1"><if condition="session('group_id') eq 1 OR session('group_id') eq 4"> <a href="{:U('Home/Project/add')}" class="btn btn-info btn-flat btn-xs">添加项目</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <if condition="$list">
+        <table class="table table-bordered">
+            <tr>
+                <th style="width:20px;">&nbsp;</th> 
+                <th><strong>CODE</strong></th>
+                <th><strong>客户</strong></th>
+                <th><strong>工艺/金属层次</strong></th>
+                <th><strong>MPW/FM</strong></th>
+                <th><strong>负责人</strong></th>
+                <th><strong>公钥文件名</strong></th>
+                <th><strong>操作</strong></th>
+            </tr>
+            <volist name="list" id="data">
+                <tr>
+                    <td><a href="javascript:changeDisplay({$data.id});"><img id="btn_{$data.id}" src="__PUBLIC__/images/open.gif"></a></td>
+                    <td>{$data.code}</td>
+                    <td>{$data.customer}</td>
+                    <td>{$data.technology}</td>
+                    <td>{$data.mpw_fm)}</td>
+                    <td>{$data.project_header_text}</td>
+                    <td>{$data.keys}</td>
+                    <td>
+                    <if condition="session('group_id') eq 1 OR session('group_id') eq 4"> 
+                        &nbsp;&nbsp; <a href="{:U('Home/Project/edit?id='.$data['id'])}">编辑</a>
+                        &nbsp;&nbsp; <a href="{:U('Home/Project/delete?id='.$data['id'])}">删除</a>
+                        &nbsp;&nbsp; <a href="{:U('Home/Message/add?code='.$data['code'])}">添加提醒</a>
+                    </if>
+                    </td>
+                </tr>
+                <tr id="iplist_{$data.id}" class="iplist_tr" style="display:none"><td colspan="8">
+                <table class="table table-bordered iplist" width="100%">
+                <tr>
+                    <th>IP</th>
+                    <th>官方时间节点</th>
+                    <th>内部时间节点</th>
+                    <th>Comment</th>
+                    <th>负责人</th>
+                    <th>模拟</th>
+                    <th>数字</th>
+                    <th>版图</th>
+                    <th>初版数据</th>
+                    <th>中间数据</th>
+                    <th>终版数据</th>
+                </tr>
+                <volist name="data['iplist']" id="iplist">
+                <tr>
+                    <td>{$iplist.ip}</td>
+                    <td>{:date('Y-m-d', strtotime($iplist['official_datetime']))}</td>
+                    <td>{:date('Y-m-d', strtotime($iplist['interal_datetime']))}</td>
+                    <td>{:nl2br($iplist['comment'])}</td>
+                    <td>{$iplist.header}</td>
+                    <td>{$iplist.moni_headers}</td>
+                    <td>{$iplist.shuzi_headers}</td>
+                    <td>{$iplist.bantu_headers}</td>
+                    <td>{:date('Y-m-d', strtotime($iplist['first_datetime']))}</td>
+                    <td>{:date('Y-m-d', strtotime($iplist['middle_datetime']))}</td>
+                    <td>{:date('Y-m-d', strtotime($iplist['final_datetime']))}</td>
+                </tr>
+                </volist>
+                </table>
+                </td>
+                </tr>
+                
+            </volist>
+            <tr class="nobg">
+                <td class="tdpage" colspan="8"><div class="pager">{$page}</div></td>
+            </tr>
+        </table>
+    <else />
+        <div class="note">
+            <p class="i">目前没有相关记录!</p>
+        </div>
+    </if>
+</div>
+<script>
+function changeDisplay(id){
+	if($('#iplist_'+id).css('display') == 'none'){
+		$('#btn_'+id).attr('src',($('#btn_'+id).attr('src')).replace('open','close'))
+		$('#iplist_'+id).show();
+	}else{
+		$('#btn_'+id).attr('src',($('#btn_'+id).attr('src')).replace('close','open'))
+		$('#iplist_'+id).hide();
+	}
+}
+</script>
+<include file="./Application/Member/View/Public/footer.html"/>

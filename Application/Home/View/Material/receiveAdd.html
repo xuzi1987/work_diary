@@ -1,0 +1,155 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<link rel="stylesheet" href="__PUBLIC__/plugins/dropList/dropList.css" type="text/css" media="all" />
+<script src="__PUBLIC__/plugins/dropList/jquery.dropList.1.0.0.js" type="text/javascript"></script>
+<script>
+$(function(){
+	$('.dlist').each(function() {
+		$(this).dropList({
+			search: true,
+			//selected: '["default"]'
+		});
+	});
+});
+</script>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">采购收货</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+        <volist name="list" id="rs">
+        <form action="__SELF__" method="post">
+        	<input type="hidden" name="final_apply_id" class="form-control" value="{$rs.id}">
+            <table class="table table-bordered">
+            	<tr>
+                    <td colspan="22">汇总人： <b>{$rs.username}</b> &nbsp;&nbsp; {:date('Y-m-d', strtotime($rs['datetime']))}</td>
+                </tr>
+                <tr>
+                	<th>申请人</th>
+                    <th>CODE</th>
+                    <th>Manufacturers.<br/>Mfr.Name</th>
+                    <th>Manufacturers.<br/>Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th>Buy.Qty</th>
+                    <th>Description</th>
+                    <th>需要到货时间</th>
+                    <th>是否紧急</th>
+                    <th>Project</th>
+                    <th>供应商推荐</th>
+                    <th>预计货运周期</th>
+                    <th>单价</th>
+                    <th>优惠</th>
+                    <th>发票税</th>
+                    <th>快递费</th>
+                    <th>预付款</th>
+                    <th>实际付款</th>
+                    <th>备注</th>
+                    <th>付款人</th>
+                    <th>到货进度</th>
+                    <th>发票进度</th>
+                </tr>
+                <volist name="rs['applylist']" id="data">
+                    <volist name="data['applylist']" id="applylist" key="k">
+                    <tr>
+                    	<if condition="$k eq 1">
+                    	<td rowspan="{:count($data['applylist'])}">{$data.username}</td>
+                        </if>
+                        <td>NULL</td>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td class="quanity">{$applylist.quantity}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{:date('Y-m-d', strtotime($applylist['receive_time']))}</td>
+                        <td>
+                        <if condition="$applylist['is_emergency'] eq 1">
+                        紧急
+                        <else />
+                        不紧急
+                        </if>
+                        </td>
+                        <td>{$applylist.project}</td>
+                        <td>{$applylist.supplier}</td>
+                        <td>{$applylist.shipping_time}</td>
+                        <td>{$applylist.price}</td>
+                        <td>{$applylist.discount}</td>
+                        <td>{$applylist.tax}</td>
+                        <td>{$applylist.express}</td>
+                        <td>
+                        <input type="hidden" name="apply_ids[]" class="form-control" value="{$applylist.apply_id}">
+                        <input type="hidden" name="applylist_ids[]" class="form-control" value="{$applylist.id}">
+                        {$applylist.advance_payment}</td>
+                        <if condition="$applylist['shipping_progress'] neq '已到货'">
+                        <td>
+                        <input type="text" class="form-control" name="total[]" value="{$applylist.total}" />
+                        </td>
+                        <td><input type="text" class="form-control" name="remark[]" value="{$applylist.remark}" /></td>
+                        <td><input type="text" class="form-control" name="payer[]" value="{$applylist.payer}" /></td>
+                        <td>
+                        <div class="dList_wrapper">
+                        <div class="default">{$applylist.shipping_progress}</div>
+                        <select class="dlist" name="dList_shipping_progress[]">
+                          <if condition="$applylist['shipping_progress'] && $applylist['shipping_progress'] neq '配送中' && $applylist['shipping_progress'] neq '已发货'">
+                          <option value="{$applylist.shipping_progress}">{$applylist.shipping_progress}</option>
+                          </if>
+                          <option value="已发货">已发货</option>
+                          <option value="配送中">配送中</option>
+                          <option value="已到货">已到货</option>
+                        </select>
+                        </div>
+                        </td>
+                        <td>
+                        <if condition="$applylist['invoice_progress'] neq '已到货'">
+                        <div class="dList_wrapper">
+                        <div class="default">{$applylist.invoice_progress}</div>
+                        <select class="dlist" name="dList_invoice_progress[]">
+                          <if condition="$applylist['invoice_progress'] && $applylist['invoice_progress'] neq '配送中' && $applylist['invoice_progress'] neq '已发货'">
+                          <option value="{$applylist.invoice_progress}">{$applylist.invoice_progress}</option>
+                          </if>
+                          <option value="已发货">已发货</option>
+                          <option value="配送中">配送中</option>
+                          <option value="已到货">已到货</option>
+                        </select>
+                        </div>
+                        <else />
+                        {$applylist.invoice_progress}<input type="hidden" name="invoice_progress[]" value="{$applylist.invoice_progress}" />
+                        </if>
+                        </td>
+                        <else />
+                         <td>{$applylist.total}<input type="hidden" name="total[]" value="{$applylist.total}" /></td>
+                         <td>{$applylist.remark}<input type="hidden" name="remark[]" value="{$applylist.remark}" /></td>
+                         <td>{$applylist.payer}<input type="hidden" name="payer[]" value="{$applylist.payer}" /></td>
+                         <td>{$applylist.shipping_progress}<input type="hidden" name="shipping_progress[]" value="{$applylist.shipping_progress}" /></td>
+                         <td>
+                         <if condition="$applylist['invoice_progress'] neq '已到货'">
+                            <div class="dList_wrapper">
+                            <div class="default">{$applylist.invoice_progress}</div>
+                            <select class="dlist" name="dList_invoice_progress[]">
+                              <if condition="$applylist['invoice_progress'] && $applylist['invoice_progress'] neq '配送中' && $applylist['invoice_progress'] neq '已发货'">
+                              <option value="{$applylist.invoice_progress}">{$applylist.invoice_progress}</option>
+                              </if>
+                              <option value="已发货">已发货</option>
+                              <option value="配送中">配送中</option>
+                              <option value="已到货">已到货</option>
+                            </select>
+                            </div>
+                            <else />
+                            {$applylist.invoice_progress}<input type="hidden" name="invoice_progress[]" value="{$applylist.invoice_progress}" />
+                          </if>
+                         </td>
+                        </if>
+                    </tr>
+                    </volist>	
+                </volist>
+            </table>
+            <div class="opt" style="margin-bottom:20px;"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+            </form>
+            </volist> 
+        <else />
+            <div class="note">
+                <p class="i">目前没有采购确认单!</p>
+            </div>
+        </if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

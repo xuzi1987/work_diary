@@ -1,0 +1,45 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">公告列表  <if condition="session('access')['option_article'] eq 1"> <a href="{:U('Home/Article/add?type='.$type)}" class="btn btn-info btn-flat btn-xs">添加公告</a></if></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+			<if condition="$list">
+				<table class="table table-bordered table-hover">
+					<tr>
+                        <th><strong>标题</strong></th>
+                        <th><strong>作者</strong></th>
+                        <th><strong>发布时间</strong></th>
+                        <th><strong>操作</strong></th>
+					</tr>
+					<volist name="list" id="data">
+                        <tr>
+                            <td>
+                            <a style="text-decoration:none;" href="{:U('Home/Article/view?id='.$data['id'])}">{$data.title}</a> &nbsp;&nbsp; 
+                            <if condition="$data['new'] eq 1">
+                            <small class="label label-success">new</small>
+                            </if>
+                            </td>
+                            <td>{$data.author}</td>
+                            <td>{$data.datetime}</td>
+                            <td>
+                            <a href="{:U('Home/Article/view?id='.$data['id'])}">查看</a>
+                            <if condition="session('access')['option_article'] eq 1"> 
+                                &nbsp;&nbsp; <a href="{:U('Home/Article/edit?id='.$data['id'])}">编辑</a>
+                                &nbsp;&nbsp; <a href="{:U('Home/Article/delete?id='.$data['id'])}">删除</a>
+                            </if>
+                            </td>
+                        </tr>
+					</volist>	
+					<tr class="nobg">
+						<td class="tdpage" colspan="4"><div class="pager">{$page}</div></td>
+					</tr>
+				</table>
+			<else />
+				<div class="note">
+					<p class="i">目前没有相关记录!</p>
+				</div>
+			</if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

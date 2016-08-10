@@ -1,0 +1,146 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">搜索用户</h3> &nbsp;&nbsp; <a href="{:U('Users/useradd')}" class="btn btn-info btn-flat btn-xs">添加用户</a>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+			<div id="srchuserdiv" class="tabcontentcur">
+				<form action="{:U('Users/userlist')}" method="get">
+				<table class="table table-bordered" style="width:800px">
+					<tr>
+						<td>真实姓名:</td>
+						<td><input type="text" name="srchname" value="{$srchname}" class="txt" /></td>
+						<td>ID:</td>
+						<td><input type="text" name="srchuid" value="{$srchuid}" class="txt" /></td>
+						<td>邮箱:</td>
+						<td><input type="text" name="srchemail" value="{$srchemail}" class="txt" /></td>
+                        <td>部门:</td>
+						<td><select name="srchdepartmentid">
+                            	<option value="0">----</option>	
+                                <volist name="department_list" id="data">
+                                    <option value="{$data.id}" <if condition="$data.id == $srchdepartmentid"> selected</if>>{$data.name}</option>
+                                </volist>
+                            </select>
+                        </td> 
+					</tr>
+					<tr>
+						<td>注册日期:</td>
+						<td><input type="text" name="srchregdatestart" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" value="{$srchregdatestart}" class="txt" />
+                        <td>到</td>
+                        <td><input type="text" name="srchregdateend" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" value="{$srchregdateend}" class="txt" /></td>
+                        <td>用户组:</td>
+						<td><select name="srchgroupid">
+                            	<option value="0">----</option>	
+                                <volist name="group_list" id="data">
+                                    <option value="{$data.id}" <if condition="$data.id == $srchgroupid"> selected</if>>{$data.title}</option>
+                                </volist>
+                            </select>
+                        </td>
+                        <td colspan="2"><input type="submit" value="提交" class="btn btn-primary" /></td>
+					</tr>
+				</table>
+				</form>
+			</div>
+		</div>
+    </div>
+		<div class="box">
+            <div class="box-header">
+            <h3 class="box-title">新增用户</h3> &nbsp;&nbsp; <a href="{:U('Users/userlist')}" class="btn btn-info btn-flat btn-xs">用户列表</a>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+			<form action="__SELF__" method="post">
+				<table class="table table-bordered" style="width:800px">
+					<tr>
+						<th>真实姓名:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="nickname" value="" class="form-control" />
+						</td>
+					</tr>
+					<tr>
+						<th>密码:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="password" value="" class="form-control" />
+						</td>
+					</tr>
+					<tr>
+						<th>Email:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="email" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<th>手机号码:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="mobile" value="" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<th>部门:</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="department_id">
+                            <volist name="department_list" id="data">
+                                <option value="{$data.id}">{$data.name}</option>
+                            </volist>	
+                            </select>
+						</td>
+					</tr>
+                    <tr>
+						<th>用户组:</th>
+					</tr>
+					<tr>
+						<td>
+						<select name="group_id">
+                        <volist name="group_list" id="data">
+                            <option value="{$data.id}">{$data.title}</option>
+                        </volist>	
+                        </select>
+						</td>
+					</tr>
+                    <tr>
+						<th>状态:</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="status">
+                            	<option value="1">在职</option>
+                                <option value="0">离职</option>
+                            </select>
+						</td>
+					</tr>
+                    <tr>
+						<th>IP:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="ip" value="{$list.ip}" class="form-control" />
+						</td>
+					</tr>
+                    <tr>
+						<th>排序:</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="usort" value="{$list.usort}" class="form-control" style="width:50px;" />
+						</td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" tabindex="3" /></div>
+			</form>
+		</div>
+	</div>
+<link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+<script src="__PUBLIC__/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
+<include file="./Application/Member/View/Public/footer.html"/>

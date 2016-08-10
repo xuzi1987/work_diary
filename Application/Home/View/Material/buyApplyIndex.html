@@ -1,0 +1,59 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">采购申请列表 &nbsp;&nbsp; <a href="{:U('Home/Material/buyApplyAdd')}" class="btn btn-info btn-flat btn-xs">添加采购</a></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <if condition="$list">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Manufacturers.Mfr.Name</th>
+                    <th>Manufacturers.Mfr.Part.Number</th>
+                    <th>Package</th>
+                    <th>Buy.Qty</th>
+                    <th>Project</th>
+                    <th>Description</th>
+                    <th>需要到货时间</th>
+                    <th>是否紧急</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <volist name="list" id="data">
+                	<tr>
+                    	<td colspan="9">申请人： <b>{$data.username}</b> &nbsp;&nbsp; {:date('Y-m-d', strtotime($data['datetime']))}</td>
+                    </tr>
+                    <volist name="data['applylist']" id="applylist" key="k">
+                    <tr>
+                        <td>{$applylist.manufacturer}</td>
+                        <td>{$applylist.partnumber}</td>
+                        <td>{$applylist.package}</td>
+                        <td>{$applylist.quantity}</td>
+                        <td>{$applylist.project}</td>
+                        <td>{$applylist.description}</td>
+                        <td>{:date('Y-m-d', strtotime($applylist['receive_time']))}</td>
+                        <td>
+                        <if condition="$applylist['is_emergency'] eq 1">
+                        紧急
+                        <else />
+                        不紧急
+                        </if>
+                        </td>
+                        <td>
+                        <if condition="session('group_id') eq 1 OR session('uid') eq $data['user_id']">
+                        <a href="{:U('Home/Material/buyApplyEdit?apply_id='.$applylist['apply_id'].'&id='.$applylist['id'])}">编辑</a>
+                        </if>
+                        </td>
+                    </tr>
+                    </volist>	
+                </volist>	
+                <tr class="nobg">
+                    <td class="tdpage" colspan="9"><div class="pager">{$page}</div></td>
+                </tr>
+            </table>
+        <else />
+            <div class="note">
+                <p class="i">目前没有采购申请单!</p>
+            </div>
+        </if>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>
