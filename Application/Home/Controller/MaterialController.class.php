@@ -988,24 +988,6 @@ class MaterialController extends CommonController {
     }
     
     public function mfrsIndex(){
-    	/* $data = readExcel('./Uploads/20160818.xls');
-    	$max_rows = 0;
-    	$sheet = 0;
-    	$i = 1;
-    	for($row=1;$row<=$data->sheets[$sheet]['numRows']&&($row<=$max_rows||$max_rows==0);$row++){
-    		$data1 = array();
-    		$data1['cateid'] = 30;
-    		$data1['code'] = 'TO00'.(($i < 10)?'000':'00').$i.'0';
-    		$data1['description'] = $data->sheets[$sheet]['cells'][$row][4];
-    		$data1['manufacturer'] = $data->sheets[$sheet]['cells'][$row][2];
-    		$data1['partnumber'] = $data->sheets[$sheet]['cells'][$row][3];
-    		$data1['package'] = $data->sheets[$sheet]['cells'][$row][1];
-    		$data1['stock'] = $data->sheets[$sheet]['cells'][$row][5];
-    		print_r($data1);
-    		M('material')->add($data1);
-    		$i++;
-    	}
-    	exit(); */
     	$map = array();
     	$count = $list = M('manufacturer')->where($map)->count();
     	$Page = new \Think\Page($count,25);
