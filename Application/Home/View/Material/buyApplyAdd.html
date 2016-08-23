@@ -10,7 +10,7 @@ $(function(){
 	init();
 	$('#addBtn').bind('click', function(){
 		var html = '';
-		html += '<tr><td><select name="cateid[]" class="form-control select2"><option value="0">--</option>';
+		html += '<tr><td><select name="cateid[]" class="form-control select2">';
         <volist name="category" id="data">
         html += '<option value="{$data.id}" <if condition="$list['cateid'] eq $data['id']">selected="selected"</if>>{$data.name}</option>';
         </volist>
@@ -86,7 +86,6 @@ function init(){
             <tr>
             	<td>
                     <select name="cateid[]" class="form-control select2">
-                        <option value="0">--</option>
                         <volist name="category" id="data">
                        <option value="{$data.id}" <if condition="$list['cateid'] eq $data['id']">selected="selected"</if>>{$data.name}</option>
                        </volist>

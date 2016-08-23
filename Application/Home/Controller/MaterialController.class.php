@@ -262,13 +262,13 @@ class MaterialController extends CommonController {
     		}
     		$this->success('添加成功', U('Material/buyApplyIndex'), 2);
     	}else{
-    		$manufacturers = M('material')->distinct(true)->field('manufacturer')->order('id ASC')->limit("0, 500")->select();
+    		$manufacturers = M('material')->distinct(true)->field('manufacturer')->where("manufacturer IS NOT null AND manufacturer != ''")->order('id ASC')->limit("0, 500")->select();
     		$this->assign('manufacturers', $manufacturers);
     		
-    		$partnumbers = M('material')->distinct(true)->field('partnumber')->order('id ASC')->limit("0, 500")->select();
+    		$partnumbers = M('material')->distinct(true)->field('partnumber')->where("partnumber IS NOT null AND partnumber != ''")->order('id ASC')->limit("0, 500")->select();
     		$this->assign('partnumbers', $partnumbers);
     		 
-    		$projects = M('buyapplylist')->distinct(true)->field('project')->order('id DESC')->limit("0, 500")->select();
+    		$projects = M('buyapplylist')->distinct(true)->field('project')->where("project IS NOT null AND project != ''")->order('id DESC')->limit("0, 500")->select();
     		$this->assign('projects', $projects);
     		
     		$category = M('category')->select();
