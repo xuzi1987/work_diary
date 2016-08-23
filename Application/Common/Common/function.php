@@ -136,7 +136,7 @@ function sftp_download($host, $remote, $local, $filesize){
 }
 
 function checkFileName($filename){
-	$filename = iconv('utf-8', 'gb2312', $filename);
+	//$filename = iconv('utf-8', 'gb2312', $filename);
 	$file_split = explode(".", $filename);
 	$ext = end($file_split);
 	$filename = substr($filename, 0, -(strlen($ext)+1));
