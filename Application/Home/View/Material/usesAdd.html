@@ -13,10 +13,10 @@ $(function(){
 					$.each(json, function(index, applylist){
 						html += '<tr>';
 						html += '<td>'+applylist.code+'<input type="hidden" name="code[]" value="'+applylist.code+'" /></td>';
-						html += '<td>'+applylist.manufacturer+'</td>';
-						html += '<td>'+applylist.partnumber+'</td>';
-						html += '<td>'+applylist.package+'</td>';
-						html += '<td>'+applylist.description+'</td>';
+						html += '<td>'+(applylist.manufacturer ? applylist.manufacturer : '')+'</td>';
+						html += '<td>'+(applylist.partnumber ? applylist.partnumber : '')+'</td>';
+						html += '<td>'+(applylist.package ? applylist.package : '')+'</td>';
+						html += '<td>'+(applylist.description ? applylist.description : '')+'</td>';
 						html += '<td><input type="text" class="form-control" name="project[]" /></td>';
 						html += '<td><input type="text" class="form-control" name="quantity[]" /></td>';
 						html += '<td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td>';
@@ -56,14 +56,14 @@ function init(){
             <td>
             <input type="text" class="form-control" name="code" value="{$code}" />
             </td>
-            <td width="160">Manufacturers.Mfr.Name：</td>
-            <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
+            <td width="160">Package：</td>
+            <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
             </tr>
             <tr>
             <td>Manufacturers.Mfr.Part.Number：</td>
             <td><input type="text" class="form-control" name="partnumber" value="{$partnumber}" /></td>
-            <td>Package：</td>
-            <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
+            <td>Manufacturers.Mfr.Name：</td>
+            <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
             </tr>
             <tr>
             <td>Description：</td>

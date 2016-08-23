@@ -23,7 +23,7 @@ class MaterialController extends CommonController {
     		$map['package'] = $package;
     	}
     	if($description){
-    		$map['description'] = $description;
+    		$map['diary_material.description'] = $description;
     	}
     	if($stock){
     		$map['stock'] = $stock;
@@ -55,6 +55,86 @@ class MaterialController extends CommonController {
     	$this->assign('description', $description);
     	$this->assign('stock', $stock);
     	$this->display();
+    }
+    
+    public function MaterialAdd(){
+    	if (session('group_id') > 1 && !session('access')['option_receive']) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	if (IS_POST) {
+    		$data = array();
+    		$data['cateid'] = I('post.cateid');
+    		$data['code'] = I('post.code');
+    		$data['package'] = I('post.package');
+    		$data['manufacturer'] = I('post.manufacturer');
+    		$data['partnumber'] = I('post.partnumber');
+    		$data['description'] = I('post.description');
+    		$data['stock'] = intval(I('post.stock'));
+    		M('material')->add($data);
+    		
+    		$this->success('添加成功', U('Material/Index'), 2);
+    	}else{
+    		$category = M('category')->select();
+    		$this->assign('category', $category);
+    		$this->display();
+    	}
+    }
+    
+    public function MaterialEdit(){
+    	if (session('group_id') > 1 && !session('access')['option_receive']) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	$id = I('get.id','intval');
+    	if (IS_POST) {
+    		$data = array();
+    		$data['cateid'] = I('post.cateid');
+    		$data['code'] = I('post.code');
+    		$data['package'] = I('post.package');
+    		$data['manufacturer'] = I('post.manufacturer');
+    		$data['partnumber'] = I('post.partnumber');
+    		$data['description'] = I('post.description');
+    		$data['stock'] = intval(I('post.stock'));
+    		M('material')->where('id='.$id)->save($data);
+    		
+    		$this->success('编辑成功', U('Material/Index'), 2);
+    	}else{
+    		$list = M('material')->where('id='.$id)->find();
+    		$this->assign('list', $list);
+    		$category = M('category')->select();
+    		$this->assign('category', $category);
+    		$this->display();
+    	}
+    }
+    
+    public function MaterialDelete(){
+    	if (session('group_id') > 1 && !session('access')['option_receive']) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	$id = I('get.id','intval');
+    	M('material')->where("id='".$id."'")->delete();
+    	$this->success('删除成功', U('Material/Index'), 2);
+    }
+    
+    public function getCode(){
+    	if (IS_POST) {
+    		$id = intval(I('post.id'));
+    		$code = $this->getMaterialCode($id, 0);
+    		echo $code;
+    	}
+    }
+    
+    public function getMaterialCode($cateid, $id){
+    	if($id){
+    		$material = M('material')->where("id=$id")->find();
+    		$code = $material['code'];
+    	}else{
+    		$category = M('category')->where("id=$cateid")->find();
+    		$material = M('material')->where("cateid=$cateid")->order('id DESC')->find();
+    		$max_id = intval(substr($material['code'], 4, 4)) + 1;
+    		$code = $category['code'].'00'.str_pad($max_id, 4, "0",STR_PAD_LEFT).'0';
+    	}
+    	
+    	return $code;
     }
     
     public function buyApplyIndex(){
@@ -143,9 +223,30 @@ class MaterialController extends CommonController {
     					)
     			);
     			foreach ($_POST['manufacturer'] as $key=>$value){
+    				$cateid = intval($_POST['cateid'][$key]);
+    				$partnumber = trim($_POST['partnumber'][$key]);
+    				$package = trim($_POST['package'][$key]);
+    				$description = trim($_POST['description'][$key]);
+    				$id = 0;
+    				if($partnumber){
+    					$material = M('material')->where("LOWER(partnumber)='".strtolower($partnumber)."'")->order('id DESC')->find();
+    				}else if ($description){
+    					$material = M('material')->where("LOWER(description)='".strtolower($description)."'")->order('id DESC')->find();
+    				}else if($package){
+    					$material = M('material')->where("LOWER(package)='".strtolower($package)."'")->order('id DESC')->find();
+    				}
+    				$id = $material['id'];
+    				if($id){
+    					$code = $material['code'];
+    				}else{
+    					$code = '';
+    				}
+    				
     				M('buyapplylist')->add(
 	    				array(
 		    				'apply_id'     =>$insertId,
+		    				'code'         =>$code,
+		    				'cateid'       =>$_POST['cateid'][$key],
 		    				'manufacturer' =>$_POST['manufacturer'][$key],
 		    				'partnumber'   =>$_POST['partnumber'][$key],
 		    				'package'      =>$_POST['package'][$key],
@@ -169,7 +270,10 @@ class MaterialController extends CommonController {
     		 
     		$projects = M('buyapplylist')->distinct(true)->field('project')->order('id DESC')->limit("0, 500")->select();
     		$this->assign('projects', $projects);
-    
+    		
+    		$category = M('category')->select();
+    		$this->assign('category', $category);
+    		
     		$this->display();
     	}
     }
@@ -244,7 +348,9 @@ class MaterialController extends CommonController {
     	}else{
     		$list = M('buyapply')->where("status=1")->order('datetime DESC')->select();
     		foreach($list as $key=>$value){
-    			$list[$key]['applylist'] = M('buyapplylist')->where("status=1 AND apply_id='".$value['id']."'")->order('id ASC')->select();
+    			$list[$key]['applylist'] = M('buyapplylist')->field('diary_buyapplylist.*, diary_material.stock')
+    			->join('diary_material ON diary_material.code = diary_buyapplylist.code', 'LEFT')
+    			->where("diary_buyapplylist.status=1 AND diary_buyapplylist.apply_id='".$value['id']."'")->order('diary_buyapplylist.id ASC')->select();
     		}
     		$this->assign('list', $list);
     		$this->display();
@@ -499,19 +605,19 @@ class MaterialController extends CommonController {
     				$finalbuyapply['applylist'][$finalbuyapplylist['apply_id']]['username'] = $buyapply['username'];
     				$finalbuyapply['applylist'][$finalbuyapplylist['apply_id']]['datetime'] = $buyapply['datetime'];
     				
-    				if($buyapply['user_id'] == session('uid') || session('uid') == 207){
+    				if($buyapply['user_id'] == session('uid') || session('uid') == 207 || session('group_id') == 1){
     					$finalbuyapply['is_proposer'][$buyapply['user_id']] = 1;
     				}
-    				if(session('uid') == 207){
+    				if(session('uid') == 207 || session('group_id') == 1){
     					$finalbuyapply['is_optiontor'] = 1;
     				}
-    				if(session('uid') == 33 || session('uid') == 207){
+    				if(session('uid') == 33 || session('uid') == 207 || session('group_id') == 1){
     					$finalbuyapply['is_header'] = 1;
     				}
-    				if(session('uid') == 34 || session('uid') == 169 || session('uid') == 207){
+    				if(session('uid') == 34 || session('uid') == 169 || session('uid') == 207 || session('group_id') == 1){
     					$finalbuyapply['is_teamleader'] = 1;
     				}
-    				if(session('uid') == 80 || session('uid') == 207){
+    				if(session('uid') == 80 || session('uid') == 207 || session('group_id') == 1){
     					$finalbuyapply['is_administrator'] = 1;
     				}
     			}
@@ -621,6 +727,7 @@ class MaterialController extends CommonController {
     					$data['shipping_progress'] = $_POST['shipping_progress'][$key];
     					$data['invoice_progress'] = $_POST['invoice_progress'][$key];
     					$data['datetime'] = date('Y-m-d H:i:s', time());
+    					$data['updatetime'] = date('Y-m-d H:i:s', time());
     					M('receive')->add($data);
     				}
     				
@@ -634,12 +741,13 @@ class MaterialController extends CommonController {
     					//入库
     					$buyapplylist = M('buyapplylist')->where("id='".intval($value)."'")->find();
     					if($buyapplylist['code']){
-    						M('material')->where("code='".$buyapplylist['code']."'")->save("stock=stock+".$buyapplylist['quantity']);
+    						M('material')->where("code='".$buyapplylist['code']."'")->setInc('stock', $buyapplylist['quantity']);
     					}else{
-    						$code = $_POST['codes'][$key];
+    						$code = $this->getMaterialCode($buyapplylist['cateid'], 0);
     						$buyconfirm = M('buyconfirm')->where("applylist_id='".intval($value)."'")->find();
     						$material_data = array(
     								'code'         =>$code,
+    								'cateid'       =>$buyapplylist['cateid'],
     								'manufacturer' =>$buyapplylist['manufacturer'],
     								'partnumber'   =>$buyapplylist['partnumber'],
     								'package'      =>$buyapplylist['package'],
@@ -649,6 +757,12 @@ class MaterialController extends CommonController {
     								'status'       =>1
     						);
     						M('material')->add($material_data);
+    						
+    						M('buyapplylist')->where("id='".intval($value)."'")->save(
+			    				array(
+			    					'code'=>$code
+			    				)
+		    				);
     					}
     					
     				}
@@ -735,10 +849,9 @@ class MaterialController extends CommonController {
     	$show = $Page->show();
     	 
     	$results = array();
-    	/* $list = M('materialuses')->field('diary_material.*,diary_materialuses.project,diary_materialuses.datetime,diary_materialuses.username,diary_materialuses.add_username,diary_materialuses.quantity')
-    	->join('diary_material ON diary_material.code = diary_material.code', 'RIGHT')
-    	->where($map)->order('datetime DESC')->limit($Page->firstRow.','.$Page->listRows)->select(); */
-    	$list = M('materialuses')->where($map)->order('datetime DESC')->limit($Page->firstRow.','.$Page->listRows)->select();
+    	$list = M('materialuses')->field('diary_material.*,diary_materialuses.project,diary_materialuses.datetime,diary_materialuses.username,diary_materialuses.add_username,diary_materialuses.quantity')
+    	->join('diary_material ON diary_material.code = diary_materialuses.code', 'LEFT')
+    	->where($map)->order('datetime DESC')->limit($Page->firstRow.','.$Page->listRows)->select();
     	$this->assign('list', $list);
     	$this->assign('page', $show);
     	$this->display();
@@ -750,7 +863,7 @@ class MaterialController extends CommonController {
     	}
     	if (IS_POST) {
     		foreach ($_POST['code'] as $key=>$code){
-    			//if($code){
+    			if($code){
     				M('materialuses')->add(array(
     						'code'        =>$code,
     						'project'     =>$_POST['project'][$key],
@@ -761,9 +874,9 @@ class MaterialController extends CommonController {
     					)
     				);
     				
-    				//M('material')->where("code='{$code}'")->save("stock=stock-".intval($_POST['quantity'][$key]));
+    				M('material')->where("code='{$code}'")->setDec("stock", intval($_POST['quantity'][$key]));
     			}
-    		//}
+    		}
     		$this->success('添加成功', U('Material/usesAdd'), 2);
     	}else{
     		$this->display();
@@ -806,7 +919,7 @@ class MaterialController extends CommonController {
     public function categoryIndex(){
     	$map = array();
     	$count = $list = M('category')->where($map)->count();
-    	$Page = new \Think\Page($count,25);
+    	$Page = new \Think\Page($count,50);
     	foreach($map as $key=>$val) {
     		$Page->parameter[$key] = urlencode($val);
     	}
@@ -829,6 +942,7 @@ class MaterialController extends CommonController {
     		$data['name'] = I('post.name');
     		$data['sort'] = I('post.sort');
     		$data['code'] = I('post.code');
+    		$data['description'] = I('post.description');
     		$data['type'] = 1;
     		$data['status'] = 1;
     	
@@ -850,6 +964,7 @@ class MaterialController extends CommonController {
     		$data['name'] = I('post.name');
     		$data['sort'] = I('post.sort');
     		$data['code'] = I('post.code');
+    		$data['description'] = I('post.description');
     		$data['type'] = 1;
     		$data['status'] = 1;
     		 
@@ -870,5 +985,121 @@ class MaterialController extends CommonController {
     	$id = I('get.id','intval');
     	M('category')->where("id='".$id."'")->delete();
     	$this->success('删除成功', U('Material/categoryIndex'), 2);
+    }
+    
+    public function mfrsIndex(){
+    	/* $data = readExcel('./Uploads/20160818.xls');
+    	$max_rows = 0;
+    	$sheet = 0;
+    	$i = 1;
+    	for($row=1;$row<=$data->sheets[$sheet]['numRows']&&($row<=$max_rows||$max_rows==0);$row++){
+    		$data1 = array();
+    		$data1['cateid'] = 30;
+    		$data1['code'] = 'TO00'.(($i < 10)?'000':'00').$i.'0';
+    		$data1['description'] = $data->sheets[$sheet]['cells'][$row][4];
+    		$data1['manufacturer'] = $data->sheets[$sheet]['cells'][$row][2];
+    		$data1['partnumber'] = $data->sheets[$sheet]['cells'][$row][3];
+    		$data1['package'] = $data->sheets[$sheet]['cells'][$row][1];
+    		$data1['stock'] = $data->sheets[$sheet]['cells'][$row][5];
+    		print_r($data1);
+    		M('material')->add($data1);
+    		$i++;
+    	}
+    	exit(); */
+    	$map = array();
+    	$count = $list = M('manufacturer')->where($map)->count();
+    	$Page = new \Think\Page($count,25);
+    	foreach($map as $key=>$val) {
+    		$Page->parameter[$key] = urlencode($val);
+    	}
+    	$Page->setConfig('prev','上一页');
+    	$Page->setConfig('next','下一页');
+    	$Page->setConfig('theme','%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%');
+    	$show = $Page->show();
+    	 
+    	$list = M('manufacturer')->where($map)->order('id DESC')->limit($Page->firstRow.','.$Page->listRows)->select();
+    	$this->assign('list', $list);
+    	$this->display();
+    }
+    
+    public function mfrsAdd(){
+    	if (session('group_id') > 1) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	if (IS_POST) {
+    		$data = array();
+    		$data['name'] = I('post.name');
+    		$data['code'] = I('post.code');
+    		 
+    		$category = M('category');
+    		$category->add($data);
+    		$this->success('添加成功', U('Material/mfrsIndex'), 2);
+    	}else{
+    		$this->display();
+    	}
+    }
+    
+    public function mfrsEdit(){
+    	if (session('group_id') > 1) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	$id = I('get.id','intval');
+    	if (IS_POST) {
+    		$data = array();
+    		$data['name'] = I('post.name');
+    		$data['sort'] = I('post.sort');
+    		 
+    		$category = M('manufacturer');
+    		$category->where('id='.$id)->save($data);
+    		$this->success('编辑成功', U('Material/mfrsIndex'), 2);
+    	}else{
+    		$list = M('manufacturer')->where('id='.$id)->find();
+    		$this->assign('list', $list);
+    		$this->display();
+    	}
+    }
+    
+    public function mfrsDelete(){
+    	if (session('group_id') > 1) {
+    		$this->error('没有权限查看此页面...', U('Index/index'));
+    	}
+    	$id = I('get.id','intval');
+    	M('manufacturer')->where("id='".$id."'")->delete();
+    	$this->success('删除成功', U('Material/mfrsIndex'), 2);
+    }
+    
+    public function mailTest(){
+    	if (IS_POST) {
+    		$to = 'wyp_sea@163.com';
+    		$title = 'mail system';
+    		$content = 'mail system';
+    		$username = I('post.username');
+    		$password = I('post.password');
+    		$attachment = './Uploads/Attachments/'.$this->upload();
+    		//echo $attachment;exit();
+    		echo sendMailAttachment($to, $title, $content, $username, $password, $attachment);
+    	}else{
+    		$this->display();
+    	}
+    }
+    
+    public function upload(){
+    	set_time_limit(0);
+    	$upload = new \Think\Upload();
+    	$upload->maxSize = 52428800;//50MB
+    	$upload->exts = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', '7z', 'jpg', 'gif', 'png', 'bmp');
+    	$upload->rootPath = './Uploads/Attachments/';
+    	$upload->savePath = '';
+    	$upload->saveName = array('checkFileName',array('__FILE__'));
+    	$upload->replace = true;
+    	$info = $upload->upload();
+    	if(!$info) {
+    		$this->error($upload->getError());
+    	}else{
+    		foreach($info as $file){
+    			//return $file['savepath'].iconv('gb2312', 'utf-8', $file['savename']);
+    			return $file['savepath'].$file['savename'];
+    		}
+    	}
     }
 }

@@ -36,7 +36,7 @@
                     	<if condition="$k eq 1">
                     	<td rowspan="{:count($data['applylist'])}">{$data.username}<input type="hidden" name="proposers[{$rs.id}][]" value="{$data.user_id}" /></td>
                         </if>
-                        <td>NULL</td>
+                        <td>{$applylist.code}</td>
                         <td>{$applylist.manufacturer}</td>
                         <td>{$applylist.partnumber}</td>
                         <td>{$applylist.package}</td>

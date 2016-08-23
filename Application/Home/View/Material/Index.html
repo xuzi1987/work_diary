@@ -13,15 +13,15 @@
        </volist>
         </select>
         </td>
-        <td width="160">Manufacturers.Mfr.Name：</td>
-        <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
+        <td width="160">Package：</td>
+        <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
         <td rowspan="3" width="60"><input type="submit" value="提交" class="btn btn-primary" /></td>
         </tr>
         <tr>
         <td>Manufacturers.Mfr.Part.Number：</td>
         <td><input type="text" class="form-control" name="partnumber" value="{$partnumber}" /></td>
-        <td>Package：</td>
-        <td><input type="text" class="form-control" name="package" value="{$package}" /></td>
+        <td>Manufacturers.Mfr.Name：</td>
+        <td><input type="text" class="form-control" name="manufacturer" value="{$manufacturer}" /></td>
         </tr>
         <tr>
         <td>Description：</td>
@@ -35,7 +35,7 @@
 </div>
 <div class="box">
     <div class="box-header">
-      <h3 class="box-title">库存单</h3>
+      <h3 class="box-title">库存单 &nbsp;&nbsp; <a href="{:U('Home/Material/MaterialAdd')}" class="btn btn-info btn-flat btn-xs">添加</a></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -44,27 +44,36 @@
                 <tr>
                     <th>CODE</th>
                     <th>分类</th>
+                    <th>Package</th>
                     <th>Manufacturers.Mfr.Name</th>
                     <th>Manufacturers.Mfr.Part.Number</th>
-                    <th>Package</th>
                     <th>Description</th>
                     <th>Inventory</th>
                     <th>Price</th>
+                    <th>操作</th>
                 </tr>
                 <volist name="list" id="applylist">
                     <tr>
                         <td>{$applylist.code}</td>
-                        <th>{$applylist.catename}</th>
+                        <td>{$applylist.catename}</td>
+                        <td>{$applylist.package}</td>
                         <td>{$applylist.manufacturer}</td>
                         <td>{$applylist.partnumber}</td>
-                        <td>{$applylist.package}</td>
                         <td>{$applylist.description}</td>
-                        <td>{$applylist.stock}</td>
+                        <td>
+                        <?php echo ($applylist['stock'] == intval($applylist['stock'])) ? intval($applylist['stock']) : $applylist['stock']; ?>
+                        </td>
                         <td>{$applylist.price}</td>
+                        <td>
+                        <if condition="session('group_id') eq 1 OR session('access')['option_receive'] eq 1">
+                        <a href="{:U('Home/Material/MaterialEdit?id='.$applylist['id'])}">编辑</a> &nbsp;&nbsp; 
+                        <a href="{:U('Home/Material/MaterialDelete?id='.$applylist['id'])}">删除</a>
+                        </if>
+                        </td>
                     </tr>
                 </volist> 
                 <tr class="nobg">
-                    <td class="tdpage" colspan="8"><div class="pager">{$page}</div></td>
+                    <td class="tdpage" colspan="9"><div class="pager">{$page}</div></td>
                 </tr>
             </table>
         <else />

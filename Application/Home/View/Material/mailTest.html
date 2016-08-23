@@ -1,0 +1,32 @@
+<include file="./Application/Member/View/Public/header.html"/>
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">邮件测试</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <form action="__SELF__" method="post" enctype="multipart/form-data">
+            <table class="table table-bordered" style="width:500px;">
+                <tr>
+                    <td><strong>邮箱:</strong></td>
+                    <td>
+                        <input type="text" name="username" value="{:session('email')}" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>密码:</strong></td>
+                    <td>
+                        <input type="text" name="password" value="" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>附件:</strong></td>
+                    <td>
+                        <input type="file" name="resume_file" />
+                    </td>
+                </tr>
+            </table>
+            <div class="opt"><input type="submit" name="submit" value="提交" class="btn btn-primary" /></div>
+        </form>
+	</div>
+<include file="./Application/Member/View/Public/footer.html"/>

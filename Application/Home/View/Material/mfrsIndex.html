@@ -1,7 +1,7 @@
 <include file="./Application/Member/View/Public/header.html"/>
 <div class="box">
     <div class="box-header">
-      <h3 class="box-title">分类列表 &nbsp;&nbsp; <a href="{:U('Home/Material/categoryAdd')}" class="btn btn-info btn-flat btn-xs">添加分类</a></h3>
+      <h3 class="box-title">厂商列表 &nbsp;&nbsp; <a href="{:U('Home/Material/mfrsAdd')}" class="btn btn-info btn-flat btn-xs">添加厂商</a></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -11,8 +11,6 @@
                     <th><strong>ID</strong></th>
                     <th><strong>CODE</strong></th>
                     <th><strong>名称</strong></th>
-                    <th><strong>描述</strong></th>
-                    <th><strong>排序</strong></th>
                     <th><strong>操作</strong></th>
                 </tr>
                 <volist name="list" id="data">
@@ -20,16 +18,14 @@
                         <td>{$data.id}</td>
                         <td>{$data.code}</td>
                         <td>{$data.name}</td>
-                        <td>{$data.description}</td>
-                        <td>{$data.sort}</td>
                         <td>
-                        <a href="{:U('Home/Material/categoryEdit?id='.$data['id'])}">编辑</a> &nbsp;&nbsp; 
-                        <a href="{:U('Home/Material/categoryDelete?id='.$data['id'])}">删除</a>
+                        <a href="{:U('Home/Material/mfrsEdit?id='.$data['id'])}">编辑</a> &nbsp;&nbsp; 
+                        <a href="{:U('Home/Material/mfrsDelete?id='.$data['id'])}">删除</a>
                         </td>
                     </tr>
                 </volist>	
                 <tr class="nobg">
-                    <td class="tdpage" colspan="6"><div class="pager">{$page}</div></td>
+                    <td class="tdpage" colspan="5"><div class="pager">{$page}</div></td>
                 </tr>
             </table>
         <else />

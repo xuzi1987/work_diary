@@ -63,8 +63,8 @@ $(function(){
                         <input type="hidden" name="applylist_ids[]" class="form-control" value="{$applylist.id}">
                         <input type="text" name="supplier[]" class="form-control">
                         </td>
-                        <td>NULL</td>
-                        <td><span class="text-red"><b>0</b></span></td>
+                        <td>{$applylist.code}</td>
+                        <td><span class="text-red"><b><?php echo ($applylist['stock'] == intval($applylist['stock'])) ? intval($applylist['stock']) : $applylist['stock']; ?></b></span></td>
                         <td><input type="button" class="btn btn-danger btn-xs deleteBtn" value="删除"></td>
                     </tr>
                     </volist>	

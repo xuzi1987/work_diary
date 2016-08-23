@@ -995,13 +995,22 @@ class PHPMailer
      */
     function AddAttachment($path, $name = "", $encoding = "base64", 
                            $type = "application/octet-stream") {
-        if(!@is_file($path))
+    	if(!@is_file($path))
         {
             $this->SetError($this->Lang("file_access") . $path);
             return false;
         }
 
-        $filename = basename($path);
+        //$filename = basename($path);
+        /*add by wyp*/
+        //$filename = $this->EncodeHeader(iconv('gb2312', 'utf-8', $path));
+        $new_path = iconv('gb2312', 'utf-8', $path);
+        if (false === strpos($new_path, '/')) 
+        	$filename = $this->EncodeHeader($new_path); 
+        else 
+        	$filename = $this->EncodeHeader(substr($new_path, strrpos($new_path, '/') + 1));
+        /*add by wyp*/
+        
         if($name == "")
             $name = $filename;
 
